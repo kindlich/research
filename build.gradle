@@ -43,25 +43,6 @@ minecraft {
 	replace "GRADLE:VERSION", project.version
 }
 
-jar {
-	//basically shamelessly stolen from Clothesline's buildscript.
-	
-	//if you're here from browsing github for jar-in-jar examples:
-	//don't forget to check the meta-inf folder, there's an important file in there.
-	
-	//copy all jarinjar-marked dependency jars into the libraries folder
-	from(configurations.jarinjar.files) {
-		include "*"
-		into "META-INF/libraries"
-	}
-	
-	//add the forge containeddeps weirdness??? hopefully this works???
-	manifest {
-		attributes "ContainedDeps": configurations.jarinjar.files.collect{it.name}.join(" ")
-		attributes "Timestamp": System.currentTimeMillis()
-	}
-}
-
 processResources {
 	// this will ensure that this task is redone when the versions change.
 	inputs.property "version", project.version

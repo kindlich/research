@@ -27,4 +27,7 @@ public interface IResearch {
     default boolean canBeCompletedMultipleTimes() {
         return false;
     }
+    
+    @Contract(value = "null -> false", pure = true)
+    boolean equals(Object other);
 }

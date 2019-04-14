@@ -1,6 +1,7 @@
 package com.hrznstudio.research.api.research;
 
 import com.hrznstudio.research.api.impl.BaseResearchTool;
+import com.hrznstudio.research.api.player.IResearchProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +17,7 @@ public class APIMethods {
     private static final Map<ResourceLocation, IResearchTool> researchTools = new HashMap<>();
     private static final Map<ResourceLocation, IResearchStep> researchSteps = new HashMap<>();
     private static final Map<ResourceLocation, IResearch> researches = new HashMap<>();
-    private static final Map<UUID, ResearchProgress> playerResearches = new HashMap<>();
+    private static final Map<UUID, IResearchProgress> playerResearches = new HashMap<>();
     
     public static IResearchTool getResearchTool(ResourceLocation location, boolean createIfAbsent) {
         return createIfAbsent ? researchTools.computeIfAbsent(location, BaseResearchTool::new) : researchTools.get(location);
@@ -82,10 +83,10 @@ public class APIMethods {
     
     @Nonnull
     @Contract("_ -> new")
-    public static ResearchProgress getProgressForPlayer(EntityPlayer player) {
+    public static IResearchProgress getProgressForPlayer(EntityPlayer player) {
         return playerResearches.computeIfAbsent(player.getGameProfile().getId(), uuid -> {
             //TODO implement
-            return new ResearchProgress(player, Collections.emptyList(), Collections.emptyList());
+            return new ResearchProgress(player);
         });
     }
 }

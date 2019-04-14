@@ -44,6 +44,14 @@ public interface IResearchStep {
         return true;
     }
     
+    /**
+     * Does the research have to be completed each time
+     */
+    @Contract(pure = true)
+    default boolean mustBeCompletedMultipleTimes() {
+        return false;
+    }
+    
     final class Result {
         
         public static final Result CONTINUE = new Result();

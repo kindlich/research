@@ -1,111 +1,100 @@
 package com.hrznstudio.research.api.player;
 
-import com.hrznstudio.research.api.research.APIMethods;
-import com.hrznstudio.research.api.research.IResearchStep;
-import com.hrznstudio.research.api.research.IResearch;
+import com.hrznstudio.research.api.research.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class ResearchProgress {
+public class ResearchProgress implements IResearchProgress {
     
     private final EntityPlayer player;
-    private final List<ResourceLocation> completedResearches;
-    private final List<ResourceLocation> completedResearchSteps;
-    private Map<ResourceLocation, IResearch> visibleResearches = null;
-    private Map<ResourceLocation, IResearch> availableResearches = null;
+    private final List<IResearch> completedResearches;
+    private final List<IResearchStep> completedResearchSteps;
+    private final CurrentResearchProgress currentResearch;
     
-    public ResearchProgress(EntityPlayer player, List<ResourceLocation> completedResearches, List<ResourceLocation> completedResearchSteps) {
+    private List<IResearch> visibleResearches = null;
+    private List<IResearch> availableResearches = null;
+    
+    //TODO make this work
+    public ResearchProgress(EntityPlayer player) {
         this.player = player;
-        this.completedResearches = completedResearches;
-        this.completedResearchSteps = completedResearchSteps;
+        this.completedResearches = new ArrayList<>();
+        this.completedResearchSteps = new ArrayList<>();
+        this.currentResearch = new CurrentResearchProgress(null, new ArrayList<>(), new ArrayList<>(), 0.0D, this);
+        this.update();
     }
     
+    @Override
     public EntityPlayer getPlayer() {
         return player;
     }
     
-    public List<ResourceLocation> getCompletedResearches() {
+    @Override
+    public List<IResearch> getCompletedResearches() {
         return completedResearches;
     }
     
-    public List<ResourceLocation> getCompletedResearchSteps() {
+    @Override
+    public List<IResearchStep> getCompletedResearchSteps() {
         return completedResearchSteps;
     }
     
-    public boolean hasCompletedResearch(ResourceLocation research) {
+    
+    @Override
+    public boolean hasCompletedResearch(IResearch research) {
         return completedResearches.contains(research);
     }
     
-    public boolean hasCompletedResearch(IResearch research) {
-        return hasCompletedResearch(research.getId());
-    }
-    
-    public boolean hasCompletedResearchStep(ResourceLocation researchStep) {
-        return completedResearchSteps.contains(researchStep);
-    }
-    
-    public boolean hasCompletedAllResearches(Collection<ResourceLocation> researches) {
-        return researches.stream().allMatch(this::hasCompletedResearch);
-    }
-    
+    @Override
     public boolean canSeeResearch(IResearch research) {
         return research.getPrerequisites().stream().allMatch(this::hasCompletedResearch);
     }
     
-    public boolean canSeeResearch(ResourceLocation research) {
-        return canSeeResearch(APIMethods.getResearch(research));
+    @Override
+    public void update() {
+        visibleResearches = APIMethods.getResearches().values().stream().filter(this::canSeeResearch).collect(Collectors.toList());
+        availableResearches = visibleResearches.stream().filter(r -> r.canBeCompletedMultipleTimes() || !completedResearches.contains(r)).collect(Collectors.toList());
+    }
+    
+    @Override
+    public void finishResearch(IResearch research) {
+        this.completedResearches.add(research);
+        this.update();
+    }
+    
+    @Override
+    public boolean hasCompletedResearchStep(IResearchStep step) {
+        return this.completedResearchSteps.contains(step);
     }
     
     /**
      * All visible, that is those who are completed and those who can be started
      */
-    public Map<ResourceLocation, IResearch> getVisibleResearches() {
-        if(visibleResearches != null)
-            return visibleResearches;
-        
-        final Map<ResourceLocation, IResearch> out = new HashMap<>();
-        APIMethods.getResearches().forEach((location, research) -> {
-            if(this.canSeeResearch(research))
-                out.put(location, research);
-        });
-        return visibleResearches = out;
+    @Override
+    public List<IResearch> getVisibleResearches() {
+        return visibleResearches;
     }
     
     /**
      * Only those that are not yet completed
      */
-    public Map<ResourceLocation, IResearch> getAvailableResearches() {
-        if(availableResearches != null)
-            return availableResearches;
-        final Map<ResourceLocation, IResearch> out = new HashMap<>();
-        getVisibleResearches().forEach((location, research) -> {
-            if(!this.completedResearches.contains(location) || research.canBeCompletedMultipleTimes())
-                out.put(location, research);
-        });
-        return availableResearches = out;
+    @Override
+    public List<IResearch> getAvailableResearches() {
+        return availableResearches;
     }
     
-    
-    public void completeResearch(IResearch research) {
-        completedResearches.add(research.getId());
-        
-        if(visibleResearches != null && availableResearches != null) {
-            APIMethods.getResearches().forEach((location, research1) -> {
-                if(research1.getPrerequisites().contains(research) && canSeeResearch(research1)) {
-                    visibleResearches.put(location, research1);
-                    availableResearches.put(location, research1);
-                }
-            });
-        } else {
-            //Already assigns it to the field so "ignoring" that result here
-            getAvailableResearches();
-        }
+    @Override
+    public CurrentResearchProgress getCurrentResearchProgress() {
+        return currentResearch;
     }
     
-    
-    public void completeResearchStep(IResearchStep step) {
-        completedResearchSteps.add(step.getId());
+    @Override
+    public void clearAllProgress() {
+        completedResearches.clear();
+        completedResearchSteps.clear();
+        currentResearch.clear();
+        update();
     }
 }
