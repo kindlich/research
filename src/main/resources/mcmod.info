@@ -1,0 +1,16 @@
+[
+{
+  "modid": "research",
+  "name": "Research",
+  "description": "Researching API",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["kindlich"],
+  "credits": "Team Horizon Studios",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

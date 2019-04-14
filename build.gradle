@@ -1,0 +1,82 @@
+buildscript {
+	repositories {
+		jcenter()
+		maven { url = "http://files.minecraftforge.net/maven" }
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+	}
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+
+version = "1.0.0"
+group = "com.hrznstudio.research" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "research"
+
+repositories {
+	mavenCentral()
+//	maven {
+//		url "http://maven.blamejared.com"
+//	}
+}
+
+configurations {
+	jarinjar {
+		transitive = false
+	}
+}
+
+dependencies {
+	//deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.15.527"
+    compile group: 'org.jetbrains', name: 'annotations', version: '17.0.0'
+
+}
+
+minecraft {
+	version = "1.12.2-14.23.5.2768"
+	runDir = "run"
+
+	mappings = "stable_39"
+	makeObfSourceJar = false
+
+	replace "GRADLE:VERSION", project.version
+}
+
+jar {
+	//basically shamelessly stolen from Clothesline's buildscript.
+	
+	//if you're here from browsing github for jar-in-jar examples:
+	//don't forget to check the meta-inf folder, there's an important file in there.
+	
+	//copy all jarinjar-marked dependency jars into the libraries folder
+	from(configurations.jarinjar.files) {
+		include "*"
+		into "META-INF/libraries"
+	}
+	
+	//add the forge containeddeps weirdness??? hopefully this works???
+	manifest {
+		attributes "ContainedDeps": configurations.jarinjar.files.collect{it.name}.join(" ")
+		attributes "Timestamp": System.currentTimeMillis()
+	}
+}
+
+processResources {
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
+
+	// replace stuff in mcmod.info, nothing else
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+
+		// replace version and mcversion
+		expand 'version': project.version, 'mcversion': project.minecraft.version
+	}
+
+	// copy everything else except the mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
+}
