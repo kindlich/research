@@ -1,33 +1,28 @@
 package com.hrznstudio.research.api.research;
 
+import com.hrznstudio.research.api.place.IResearchPlace;
+import com.hrznstudio.research.api.player.PlayerProgress;
+import com.hrznstudio.research.api.player.ResearchProgress;
 import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.Contract;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.function.Predicate;
 
 public interface IResearch {
-    
-    @Contract(pure = true)
-    IResearchStepInstance getStart();
-    
-    @Contract(mutates = "this")
-    void addPrerequisite(IResearch prerequisite);
-    
-    @Contract(pure = true)
-    List<IResearch> getPrerequisites();
-    
-    @Contract(pure = true)
+
     ResourceLocation getId();
-    
-    /**
-     * Can the player do this research multiple times?
-     * Usually false, but you could for example use this system to instead craft something then you might want it to be true.
-     */
-    @Contract(pure = true)
-    default boolean canBeCompletedMultipleTimes() {
-        return false;
+
+    boolean isRepeatable(PlayerProgress playerProgress);
+
+    default boolean isVisibleTo(PlayerProgress playerProgress) {
+        return getPrerequisite().test(playerProgress) && (isRepeatable(playerProgress) || !playerProgress.hasCompletedResearch(this));
     }
-    
-    @Contract(value = "null -> false", pure = true)
-    boolean equals(Object other);
+
+    Predicate<PlayerProgress> getPrerequisite();
+
+    boolean visibleAt(IResearchPlace researchPlace);
+
+    Collection<IResearchStep> getAvailableSteps(ResearchProgress playerProgress);
+
+    void onPlayerComplete(PlayerProgress playerProgress);
 }

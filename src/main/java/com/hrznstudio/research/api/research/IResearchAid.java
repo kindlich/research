@@ -1,18 +1,20 @@
 package com.hrznstudio.research.api.research;
 
+import com.hrznstudio.research.api.gui.DrawTool;
+import com.hrznstudio.research.api.place.IResearchPlace;
+import com.hrznstudio.research.api.player.PlayerProgress;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
+import java.awt.*;
 
 public interface IResearchAid {
-    
-    /**
-     * The Aid's ID
-     */
-    @Nonnull
     @Contract(pure = true)
     ResourceLocation getId();
+
+    void drawInfo(IResearchPlace place, DrawTool drawTool, Rectangle dimensions, PlayerProgress playerProgress);
+
+    default void drawInfoForStep(IResearchPlace place, DrawTool drawTool, Rectangle dimensions, PlayerProgress playerProgress) {
+        drawInfo(place, drawTool, dimensions, playerProgress);
+    }
 }
