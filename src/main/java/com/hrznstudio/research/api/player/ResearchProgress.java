@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class ResearchProgress {
     private final Collection<IResearchStep> completedSteps;
@@ -44,6 +45,11 @@ public class ResearchProgress {
         return currentStep;
     }
 
+    @Contract(pure = true)
+    public boolean hasCurrentStep() {
+        return getCurrentStep() != null;
+    }
+
     public boolean tryCompleteCurrentStep(IResearchPlace place) {
         if (this.currentStep == null)
             return false;
@@ -60,7 +66,13 @@ public class ResearchProgress {
 
 
     public Collection<IResearchStep> getAvailableSteps() {
-        return this.research.getAvailableSteps(this);
+        if (hasCurrentStep())
+            return Collections.emptySet();
+
+        final Collection<IResearchStep> availableSteps = this.research.getAvailableSteps(this);
+        if (availableSteps.isEmpty())
+            this.playerProgress.completeResearch(research);
+        return availableSteps;
     }
 
 }

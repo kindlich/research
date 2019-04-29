@@ -36,12 +36,14 @@ public class SimpleResearchStepWithProgress implements IResearchStep {
 
     @Override
     public Rectangle drawInfo(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        return null;
+        drawTool.drawLocalizedText(getId().getPath());
+        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
     }
 
     @Override
     public Rectangle drawContent(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        return null;
+        drawTool.drawLocalizedText(getId().getPath());
+        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
     }
 
     @Override

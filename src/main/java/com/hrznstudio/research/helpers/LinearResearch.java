@@ -47,6 +47,10 @@ public class LinearResearch implements IResearch {
 
     @Override
     public Collection<IResearchStep> getAvailableSteps(ResearchProgress playerProgress) {
+        if (playerProgress.hasCurrentStep()) {
+            return Collections.emptySet();
+        }
+
 
         for (IResearchStep step : this.steps) {
             if (!playerProgress.getCompletedSteps().contains(step))

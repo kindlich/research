@@ -54,7 +54,7 @@ public class DummyStarter {
             System.out.println("Starting " + next.getId());
             progressFor.StartStep(next, place);
 
-            if(progressFor.getCurrentStep() != null) {
+            if(progressFor.hasCurrentStep()) {
                 System.out.println("Step had additional content");
                 while (!progressFor.tryCompleteCurrentStep(place)) {
                     System.out.println("Could not completed current step, trying again");

@@ -4,8 +4,8 @@ import com.hrznstudio.research.api.gui.DrawTool;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
-import com.hrznstudio.research.api.research.IResearchStepProgress;
 import com.hrznstudio.research.api.research.IResearchStep;
+import com.hrznstudio.research.api.research.IResearchStepProgress;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Contract;
 
@@ -32,12 +32,14 @@ public class SimpleResearchStep implements IResearchStep {
 
     @Override
     public Rectangle drawInfo(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        return null;
+        drawTool.drawLocalizedText(getId().getPath());
+        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
     }
 
     @Override
     public Rectangle drawContent(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        return null;
+        drawTool.drawLocalizedText(getId().getPath());
+        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
     }
 
     @Override
