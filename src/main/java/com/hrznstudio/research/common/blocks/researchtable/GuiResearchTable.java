@@ -18,10 +18,10 @@ import java.io.IOException;
 @ParametersAreNonnullByDefault
 public class GuiResearchTable extends GuiContainer {
 
-    private final TileResearchTable table;
-    private final PlayerProgress progress;
-    private final DrawPaneResearchTable drawPane;
-    private IResearch selectedResearch;
+    public final TileResearchTable table;
+    public final PlayerProgress progress;
+    public final DrawPaneResearchTable drawPane;
+    public IResearch selectedResearch;
 
     public GuiResearchTable(TileResearchTable table, EntityPlayer player) {
         super(new ContainerResearchTable(table, player.inventory));

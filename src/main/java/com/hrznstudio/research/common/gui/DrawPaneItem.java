@@ -21,12 +21,10 @@ public class DrawPaneItem extends DrawPane {
         final ItemStack item = getStack();
         final RenderItem renderItem = guiResearchTable.mc.getRenderItem();
 
-        renderItem.zLevel = -10.0F;
-
         renderItem.renderItemAndEffectIntoGUI(guiResearchTable.mc.player, item, startX, startY);
         renderItem.renderItemOverlayIntoGUI(guiResearchTable.mc.fontRenderer, item, startX, startY, null);
-        drawBorder(0xffffffff, 2);
-        renderItem.zLevel = 0.0F;
+        drawBorder(0xff000000, 2);
+
     }
 
     @Override
@@ -35,7 +33,7 @@ public class DrawPaneItem extends DrawPane {
     }
 
     @Override
-    void init() {
+    public void init() {
 
     }
 

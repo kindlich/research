@@ -21,7 +21,7 @@ class DrawPaneBasic extends DrawPane{
     }
 
     @Override
-    void init() {
+    public void init() {
 
     }
 

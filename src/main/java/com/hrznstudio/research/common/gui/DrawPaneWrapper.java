@@ -22,7 +22,7 @@ public abstract class DrawPaneWrapper<Content extends DrawPane> extends DrawPane
     }
 
     @Override
-    void init() {
+    public void init() {
         content.init();
     }
 

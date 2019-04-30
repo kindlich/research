@@ -87,38 +87,38 @@ public class DrawPaneResearchTable extends DrawPane {
         if (!super.resize(startX, startY, width, height))
             return false;
 
-        final int unitLeft = width / 25;
-        final int unitDown = height / 10;
+        final double unitLeft = width / 25.0D;
+        final double unitDown = height / 10.0D;
 
         {
             //Tools
-            final int offSet = unitLeft * 3;
+            final int offSet = (int) (unitLeft * 3);
             final int setWidth = width - 2 * offSet;
             final int setX = startX + offSet;
-            final int setY = startY + unitDown;
-            researchTools.resize(setX, setY, setWidth, unitDown);
+            final int setY = (int) (startY + unitDown);
+            researchTools.resize(setX, setY, setWidth, (int) unitDown);
         }
 
 
-        final int panelHeights = unitDown * 5;
-        final int panelY = startY + 2 * unitDown;
+        final int panelHeights = (int) (unitDown * 5);
+        final int panelY = (int) (startY + 2 * unitDown);
         {
             //Aids
-            final int setWidth = unitLeft * 4;
-            researchAids.resize(startX + unitLeft, startY + panelY, setWidth, panelHeights);
+            final int setWidth = (int) (unitLeft * 4);
+            researchAids.resize((int) (startX + unitLeft), startY + panelY, setWidth, panelHeights);
         }
 
         {
             //Steps
-            final int setWidth = unitLeft * 13;
-            final int setX = startX + 6 * unitLeft;
+            final int setWidth = (int) (unitLeft * 13);
+            final int setX = (int) (startX + 6 * unitLeft);
             researchSteps.resize(setX, startY + panelY, setWidth, panelHeights);
         }
 
         {
             //List
-            final int setWidth = unitLeft * 4;
-            final int setX = startX + 20 * unitLeft;
+            final int setWidth = (int) (unitLeft * 4);
+            final int setX = (int) (startX + 20 * unitLeft);
             researchList.resize(setX, startY + panelY, setWidth, panelHeights);
         }
 

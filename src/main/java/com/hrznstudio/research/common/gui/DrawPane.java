@@ -3,6 +3,7 @@ package com.hrznstudio.research.common.gui;
 import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.I18n;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -10,15 +11,21 @@ import java.util.function.Function;
 
 @ParametersAreNonnullByDefault
 public abstract class DrawPane {
-    protected int startX;
-    protected int startY;
-    protected int width;
-    protected int height;
+    public int startX;
+    public int startY;
+    public int width;
+    public int height;
     protected GuiResearchTable guiResearchTable;
 
     @Contract(pure = true)
     public DrawPane(GuiResearchTable guiResearchTable) {
         this.guiResearchTable = guiResearchTable;
+    }
+
+    @Contract(pure = true)
+    public DrawPane(DrawPane other) {
+        this.guiResearchTable = other.guiResearchTable;
+        resize(other.startX, other.startY, other.width, other.height);
     }
 
     public void setGuiResearchTable(GuiResearchTable guiResearchTable) {
@@ -29,7 +36,7 @@ public abstract class DrawPane {
 
     public abstract void drawBackground(int mouseX, int mouseY);
 
-    abstract void init();
+    public abstract void init();
 
     public abstract void handleClick(int mouseX, int mouseY, int mouseButton);
 
@@ -74,18 +81,43 @@ public abstract class DrawPane {
         getSubPane(width, 0, size, height + size).drawRect(color);
     }
 
+    public DrawPane drawBorderAndReturnInnerPane(int color, int size, int borderOffset) {
+        drawBorder(color, size);
+        return innerPane(size + borderOffset);
+    }
+
+    public DrawPane innerPane(int offsetAll) {
+        final int offset = 2 * offsetAll;
+        return getSubPane(offsetAll, offsetAll, width - offset, height - offset);
+    }
+
+    public DrawPane innerPane(int offsetTopButton, int offsetSides) {
+        return getSubPane(offsetSides, offsetTopButton, width - 2 * offsetSides, height - 2 * offsetTopButton);
+    }
+
+
     public void drawRect(int color) {
         Gui.drawRect(startX, startY, startX + width, startY + height, color);
     }
 
-    public void drawLocalizedText(String localizationKey, int color) {
-        int x;
+    public void drawLocalizedText(int color, String localizationKey, Object... parameters) {
+        drawText(color, I18n.format(localizationKey, parameters));
+    }
+
+    public void drawProgressBar(double done) {
+        drawBorder(0xff000000, 1);
+
+        final int w = (int) (width * done);
+        getSubPane(1, 1, w, height - 1).drawRect(0xff008000);
+    }
+
+    public void drawText(int color, String text) {
         final FontRenderer fontRenderer = guiResearchTable.mc.fontRenderer;
         final int fontHeightPre = fontRenderer.FONT_HEIGHT;
-        while((x = fontRenderer.getWordWrappedHeight(localizationKey, width)) > height) {
+        while (fontRenderer.getWordWrappedHeight(text, width) > height) {
             fontRenderer.FONT_HEIGHT--;
         }
-        fontRenderer.drawSplitString(localizationKey, startX, startY, width, color);
+        fontRenderer.drawSplitString(text, startX, startY, width, color);
         fontRenderer.FONT_HEIGHT = fontHeightPre;
     }
 }

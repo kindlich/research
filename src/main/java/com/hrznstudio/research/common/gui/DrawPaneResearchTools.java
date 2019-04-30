@@ -37,7 +37,7 @@ public class DrawPaneResearchTools extends DrawPane {
     }
 
     @Override
-    void init() {
+    public void init() {
         toolSlots.clear();
         final int slotCount = itemStackHandler.getSlots();
         final int slotSize = width / (slotCount + 2);
