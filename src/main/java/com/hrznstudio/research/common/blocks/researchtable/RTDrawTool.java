@@ -29,6 +29,6 @@ public class RTDrawTool implements DrawToolRectangle {
 
     @Override
     public void drawLocalizedText(String localizationKey) {
-        table.drawCenteredString(table.getMC().fontRenderer, localizationKey, dimensions.x, dimensions.y, 0);
+        table.drawCenteredString(table.mc.fontRenderer, localizationKey, dimensions.x, dimensions.y, 0);
     }
 }
