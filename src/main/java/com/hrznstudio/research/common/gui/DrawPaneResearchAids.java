@@ -15,8 +15,18 @@ public class DrawPaneResearchAids extends DrawPane {
 
         final int heightUnit = height / 7;
         final DrawPane header = getSubPane(0, 0, width, heightUnit);
-        header.drawRect(0xabcdef01);
+        //header.drawRect(0xabcdef01);
         header.drawLocalizedText("research.aid.desc", 0xab345678);
+
+        final DrawPane mainContent = getSubPane(0, heightUnit, width, heightUnit * 6);
+        //mainContent.drawRect(0x30663301);
+    }
+
+    @Override
+    public void drawBackground(int mouseX, int mouseY) {
+        final int heightUnit = height / 7;
+        final DrawPane header = getSubPane(0, 0, width, heightUnit);
+        header.drawRect(0xabcdef01);
 
         final DrawPane mainContent = getSubPane(0, heightUnit, width, heightUnit * 6);
         mainContent.drawRect(0x30663301);

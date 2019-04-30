@@ -25,8 +25,9 @@ public abstract class DrawPane {
         this.guiResearchTable = guiResearchTable;
     }
 
-    public void draw(int mouseX, int mouseY) {
-    }
+    public abstract void draw(int mouseX, int mouseY);
+
+    public abstract void drawBackground(int mouseX, int mouseY);
 
     abstract void init();
 

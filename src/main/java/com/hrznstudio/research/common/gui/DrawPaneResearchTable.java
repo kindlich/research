@@ -48,6 +48,17 @@ public class DrawPaneResearchTable extends DrawPane {
     }
 
     @Override
+    public void drawBackground(int mouseX, int mouseY) {
+        guiResearchTable.mc.renderEngine.bindTexture(backgroundTexture);
+        Gui.drawModalRectWithCustomSizedTexture(startX, startY, 0, 0, width, height, width, height);
+
+        this.researchList.drawBackground(mouseX, mouseY);
+        this.researchSteps.drawBackground(mouseX, mouseY);
+        this.researchAids.drawBackground(mouseX, mouseY);
+        this.researchTools.drawBackground(mouseX, mouseY);
+    }
+
+    @Override
     public void init() {
         this.researchList.init();
         this.researchSteps.init();
@@ -113,10 +124,5 @@ public class DrawPaneResearchTable extends DrawPane {
 
         return true;
 
-    }
-
-    public void drawBackground() {
-        guiResearchTable.mc.renderEngine.bindTexture(backgroundTexture);
-        Gui.drawModalRectWithCustomSizedTexture(startX, startY, 0, 0, width, height, width, height);
     }
 }

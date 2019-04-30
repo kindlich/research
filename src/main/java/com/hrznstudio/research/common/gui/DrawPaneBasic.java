@@ -11,6 +11,16 @@ class DrawPaneBasic extends DrawPane{
     }
 
     @Override
+    public void draw(int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    public void drawBackground(int mouseX, int mouseY) {
+
+    }
+
+    @Override
     void init() {
 
     }

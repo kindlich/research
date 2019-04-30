@@ -17,6 +17,11 @@ public abstract class DrawPaneWrapper<Content extends DrawPane> extends DrawPane
     }
 
     @Override
+    public void drawBackground(int mouseX, int mouseY) {
+        content.drawBackground(mouseX, mouseY);
+    }
+
+    @Override
     void init() {
         content.init();
     }

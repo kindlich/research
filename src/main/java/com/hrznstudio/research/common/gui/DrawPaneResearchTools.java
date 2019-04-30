@@ -20,10 +20,19 @@ public class DrawPaneResearchTools extends DrawPane {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        drawBorder(0xffffffff);
-        //drawRect(0xabcdefff);
+
         for (DrawPaneWrapperHoverColor<DrawPaneItem> subPane : toolSlots) {
             subPane.draw(mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public void drawBackground(int mouseX, int mouseY) {
+        drawBorder(0xffffffff);
+        //drawRect(0xabcdefff);
+
+        for (DrawPaneWrapperHoverColor<DrawPaneItem> subPane : toolSlots) {
+            subPane.drawBackground(mouseX, mouseY);
         }
     }
 

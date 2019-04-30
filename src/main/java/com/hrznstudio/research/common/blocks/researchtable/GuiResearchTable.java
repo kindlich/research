@@ -42,7 +42,7 @@ public class GuiResearchTable extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.drawWorldBackground(0);
-        drawPane.drawBackground();
+        drawPane.drawBackground(mouseX, mouseY);
     }
 
     @Override

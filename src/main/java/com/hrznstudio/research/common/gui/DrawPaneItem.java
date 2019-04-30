@@ -30,6 +30,11 @@ public class DrawPaneItem extends DrawPane {
     }
 
     @Override
+    public void drawBackground(int mouseX, int mouseY) {
+
+    }
+
+    @Override
     void init() {
 
     }
