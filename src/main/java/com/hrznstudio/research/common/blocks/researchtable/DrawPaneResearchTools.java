@@ -1,6 +1,9 @@
-package com.hrznstudio.research.common.gui;
+package com.hrznstudio.research.common.blocks.researchtable;
 
 import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
+import com.hrznstudio.research.common.gui.DrawPane;
+import com.hrznstudio.research.common.gui.DrawPaneItem;
+import com.hrznstudio.research.common.gui.DrawPaneWrapperHoverColor;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -1,8 +1,9 @@
-package com.hrznstudio.research.common.gui;
+package com.hrznstudio.research.common.blocks.researchtable;
 
 import com.hrznstudio.research.api.research.IResearchAid;
 import com.hrznstudio.research.common.blocks.aids.aidBattery.AidBattery;
 import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
+import com.hrznstudio.research.common.gui.DrawPane;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -21,7 +22,8 @@ public class DrawPaneResearchAids extends DrawPane {
 
         drawBorder(0xff000000, 2);
 
-        header.innerPane(1).drawLocalizedText(0xab345678, "research.table.aid.desc");
+        if (header != null)
+            header.innerPane(1).drawLocalizedText(0xab345678, "research.table.aid.desc");
 
         if (content != null) {
             content.draw(mouseX, mouseY);
@@ -31,7 +33,8 @@ public class DrawPaneResearchAids extends DrawPane {
     @Override
     public void drawBackground(int mouseX, int mouseY) {
         final int heightUnit = height / 7;
-        header.drawRect(0xabcdef01);
+        if (header != null)
+            header.drawRect(0xabcdef01);
 
         final DrawPane mainContent = getSubPane(0, heightUnit, width, heightUnit * 6);
         mainContent.drawRect(0x30663301);
@@ -43,7 +46,7 @@ public class DrawPaneResearchAids extends DrawPane {
     @Override
     public void init() {
         final int heightUnit = height / 7;
-        this.header = getSubPane(2, 2, width-2, heightUnit - 2);
+        this.header = getSubPane(2, 2, width - 2, heightUnit - 2);
 
         final DrawPane mainContent = getSubPane(1, heightUnit, width - 1, heightUnit * 6);
         this.content = selectedAid == null ? null : selectedAid.drawInfo(null, mainContent, guiResearchTable.progress);

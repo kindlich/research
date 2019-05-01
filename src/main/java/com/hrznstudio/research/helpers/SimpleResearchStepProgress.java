@@ -24,7 +24,8 @@ public class SimpleResearchStepProgress implements IResearchStepProgress {
 
     @Override
     public boolean canBeCompleted(PlayerProgress progress, IResearchPlace place) {
-        return random.nextBoolean();
+        return false;
+        //return random.nextBoolean();
     }
 
     @Override
@@ -32,13 +33,18 @@ public class SimpleResearchStepProgress implements IResearchStepProgress {
         return step;
     }
 
+    private double current = 0.0D;
+
     @Override
     public DrawPane getDrawPane(DrawPane parent) {
         return new DrawPaneWrapper<DrawPane>(parent) {
             @Override
             public void draw(int mouseX, int mouseY) {
                 super.draw(mouseX, mouseY);
-                drawBorderAndReturnInnerPane(0xff000000, 1, 1).drawText(0xff000000, "Hello World");
+                final DrawPane drawPane = drawBorderAndReturnInnerPane(0xff000000, 1, 1);
+                drawPane.drawText(0xff000000, "Hello World");
+                drawPane.drawSine(current, current + 2 * Math.PI, 0xffff0000, 2);
+                current += 0.05;
             }
         };
     }

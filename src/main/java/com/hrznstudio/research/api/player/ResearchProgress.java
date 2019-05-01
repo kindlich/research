@@ -33,7 +33,9 @@ public class ResearchProgress {
     }
 
     public void StartStep(IResearchStep step, IResearchPlace place) {
-        if (step.canBeStarted(playerProgress, place))
+        if(!step.canBeStarted(playerProgress, place))
+            return;
+
             this.currentStep = step.onStarted(this, place);
         if (this.currentStep == null) {
             step.onCompleted(this, place);

@@ -1,7 +1,7 @@
-package com.hrznstudio.research.common.gui;
+package com.hrznstudio.research.common.blocks.researchtable;
 
 import com.hrznstudio.research.ResearchMod;
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
+import com.hrznstudio.research.common.gui.DrawPane;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Contract;
@@ -10,11 +10,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class DrawPaneResearchTable extends DrawPane {
-    private final ResourceLocation backgroundTexture;
-    private final DrawPaneResearchList researchList;
-    private final DrawPaneResearchSteps researchSteps;
-    private final DrawPaneResearchAids researchAids;
-    private final DrawPaneResearchTools researchTools;
+    public final ResourceLocation backgroundTexture;
+    public final DrawPaneResearchList researchList;
+    public final DrawPaneResearchSteps researchSteps;
+    public final DrawPaneResearchAids researchAids;
+    public final DrawPaneResearchTools researchTools;
 
     @Contract(pure = true)
     public DrawPaneResearchTable(GuiResearchTable guiResearchTable, DrawPaneResearchList researchList, DrawPaneResearchSteps researchSteps, DrawPaneResearchAids researchAids, DrawPaneResearchTools researchTools) {
@@ -39,7 +39,6 @@ public class DrawPaneResearchTable extends DrawPane {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-
 
         this.researchList.draw(mouseX, mouseY);
         this.researchSteps.draw(mouseX, mouseY);
@@ -123,6 +122,14 @@ public class DrawPaneResearchTable extends DrawPane {
         }
 
         return true;
+    }
 
+    @Override
+    public void onTableUpdated() {
+        super.onTableUpdated();
+        researchList.onTableUpdated();
+        researchSteps.onTableUpdated();
+        researchAids.onTableUpdated();
+        researchTools.onTableUpdated();
     }
 }

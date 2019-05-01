@@ -3,7 +3,6 @@ package com.hrznstudio.research.common.blocks.researchtable;
 import com.hrznstudio.research.APIMethods;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearch;
-import com.hrznstudio.research.common.gui.*;
 import com.hrznstudio.research.helpers.ContainerResearchTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -12,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Slot;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class GuiResearchTable extends GuiContainer {
     public final TileResearchTable table;
     public final PlayerProgress progress;
     public final DrawPaneResearchTable drawPane;
-    public IResearch selectedResearch;
+    private IResearch selectedResearch;
 
     public GuiResearchTable(TileResearchTable table, EntityPlayer player) {
         super(new ContainerResearchTable(table, player.inventory));
@@ -63,8 +63,8 @@ public class GuiResearchTable extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
-        this.drawPane.resize(16, 16, width - 32, height - 32);
 
+        this.drawPane.resize(16, 16, width - 32, height - 32);
         drawPane.init();
     }
 
@@ -84,5 +84,18 @@ public class GuiResearchTable extends GuiContainer {
 
     public ContainerResearchTable getContainer() {
         return (ContainerResearchTable) this.inventorySlots;
+    }
+
+    public IResearch getSelectedResearch() {
+        return selectedResearch;
+    }
+
+    public void setSelectedResearch(@Nullable IResearch research) {
+        this.selectedResearch = research;
+        this.tableUpdated();
+    }
+
+    public void tableUpdated() {
+        this.drawPane.onTableUpdated();
     }
 }

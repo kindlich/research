@@ -28,10 +28,6 @@ public abstract class DrawPane {
         resize(other.startX, other.startY, other.width, other.height);
     }
 
-    public void setGuiResearchTable(GuiResearchTable guiResearchTable) {
-        this.guiResearchTable = guiResearchTable;
-    }
-
     public abstract void draw(int mouseX, int mouseY);
 
     public abstract void drawBackground(int mouseX, int mouseY);
@@ -119,5 +115,18 @@ public abstract class DrawPane {
         }
         fontRenderer.drawSplitString(text, startX, startY, width, color);
         fontRenderer.FONT_HEIGHT = fontHeightPre;
+    }
+
+    public void drawSine(double from, double to, int color, int dotSize) {
+        double range = to - from;
+        for (int i = 0; i < this.width; i++) {
+            final double functionValue = Math.sin(from + (i * range / width));
+            //final int startY = 0;
+            getSubPane(i, (int) ((0.5 * height) * (1.0D - functionValue)), dotSize, dotSize).drawRect(color);
+        }
+    }
+
+    public void onTableUpdated() {
+
     }
 }
