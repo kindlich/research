@@ -4,11 +4,10 @@ import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
 import com.hrznstudio.research.api.research.IResearch;
-import com.hrznstudio.research.api.research.IResearchStepProgress;
 import com.hrznstudio.research.api.research.IResearchStep;
 import com.hrznstudio.research.helpers.LinearResearch;
 import com.hrznstudio.research.helpers.SimpleResearchStep;
-import com.hrznstudio.research.helpers.SimpleResearchStepProgress;
+import com.hrznstudio.research.helpers.ResearchStepProgressSineMiniGame;
 import com.hrznstudio.research.helpers.SimpleResearchStepWithProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +27,7 @@ public class DummyStarter {
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step1")));
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step2")));
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step3")));
-        steps.add(new SimpleResearchStepWithProgress(new ResourceLocation("research", "step4"), (s, p) -> new SimpleResearchStepProgress(s)));
+        steps.add(new SimpleResearchStepWithProgress(new ResourceLocation("research", "step4"), (s, p) -> new ResearchStepProgressSineMiniGame(s)));
 
 
         final IResearch research = new LinearResearch(researchId, table, steps);
@@ -52,7 +51,7 @@ public class DummyStarter {
             }
 
             System.out.println("Starting " + next.getId());
-            progressFor.StartStep(next, place);
+            progressFor.startStep(next, place);
 
             if(progressFor.hasCurrentStep()) {
                 System.out.println("Step had additional content");

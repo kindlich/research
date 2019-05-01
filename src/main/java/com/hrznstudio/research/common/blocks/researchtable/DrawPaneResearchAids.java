@@ -1,9 +1,10 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
+import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearchAid;
 import com.hrznstudio.research.common.blocks.aids.aidBattery.AidBattery;
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
 import com.hrznstudio.research.common.gui.DrawPane;
+import com.hrznstudio.research.common.gui.Renderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -12,9 +13,11 @@ public class DrawPaneResearchAids extends DrawPane {
     private IResearchAid selectedAid = new AidBattery();
     private DrawPane content;
     private DrawPane header;
+    private final PlayerProgress progress;
 
-    public DrawPaneResearchAids(GuiResearchTable guiResearchTable) {
-        super(guiResearchTable);
+    public DrawPaneResearchAids(Renderer renderer, PlayerProgress progress) {
+        super(renderer);
+        this.progress = progress;
     }
 
     @Override
@@ -34,10 +37,10 @@ public class DrawPaneResearchAids extends DrawPane {
     public void drawBackground(int mouseX, int mouseY) {
         final int heightUnit = height / 7;
         if (header != null)
-            header.drawRect(0xabcdef01);
+            header.fill(0xabcdef01);
 
         final DrawPane mainContent = getSubPane(0, heightUnit, width, heightUnit * 6);
-        mainContent.drawRect(0x30663301);
+        mainContent.fill(0x30663301);
 
         if (content != null)
             content.drawBackground(mouseX, mouseY);
@@ -49,9 +52,18 @@ public class DrawPaneResearchAids extends DrawPane {
         this.header = getSubPane(2, 2, width - 2, heightUnit - 2);
 
         final DrawPane mainContent = getSubPane(1, heightUnit, width - 1, heightUnit * 6);
-        this.content = selectedAid == null ? null : selectedAid.drawInfo(null, mainContent, guiResearchTable.progress);
+        this.content = selectedAid == null ? null : selectedAid.drawInfo(null, mainContent, progress);
         if (content != null)
             content.init();
+    }
+
+    @Override
+    public void tearDown() {
+        if(this.content != null)
+            this.content.tearDown();
+        if (this.header != null) {
+            this.header.tearDown();
+        }
     }
 
     @Override

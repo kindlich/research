@@ -2,6 +2,7 @@ package com.hrznstudio.research.common.blocks.researchtable;
 
 import com.hrznstudio.research.ResearchMod;
 import com.hrznstudio.research.common.gui.DrawPane;
+import com.hrznstudio.research.common.gui.Renderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Contract;
@@ -17,8 +18,8 @@ public class DrawPaneResearchTable extends DrawPane {
     public final DrawPaneResearchTools researchTools;
 
     @Contract(pure = true)
-    public DrawPaneResearchTable(GuiResearchTable guiResearchTable, DrawPaneResearchList researchList, DrawPaneResearchSteps researchSteps, DrawPaneResearchAids researchAids, DrawPaneResearchTools researchTools) {
-        super(guiResearchTable);
+    public DrawPaneResearchTable(Renderer renderer, DrawPaneResearchList researchList, DrawPaneResearchSteps researchSteps, DrawPaneResearchAids researchAids, DrawPaneResearchTools researchTools) {
+        super(renderer);
         this.researchList = researchList;
         this.researchSteps = researchSteps;
         this.researchAids = researchAids;
@@ -27,7 +28,7 @@ public class DrawPaneResearchTable extends DrawPane {
     }
 
     @Contract(pure = true)
-    public DrawPaneResearchTable(GuiResearchTable guiResearchTable, DrawPaneResearchList researchList, DrawPaneResearchSteps researchSteps, DrawPaneResearchAids researchAids, DrawPaneResearchTools researchTools, ResourceLocation backgroundTexture) {
+    public DrawPaneResearchTable(Renderer guiResearchTable, DrawPaneResearchList researchList, DrawPaneResearchSteps researchSteps, DrawPaneResearchAids researchAids, DrawPaneResearchTools researchTools, ResourceLocation backgroundTexture) {
         super(guiResearchTable);
         this.researchList = researchList;
         this.researchSteps = researchSteps;
@@ -48,8 +49,7 @@ public class DrawPaneResearchTable extends DrawPane {
 
     @Override
     public void drawBackground(int mouseX, int mouseY) {
-        guiResearchTable.mc.renderEngine.bindTexture(backgroundTexture);
-        Gui.drawModalRectWithCustomSizedTexture(startX, startY, 0, 0, width, height, width, height);
+        renderer.drawTexture(startX, startY, width, height, backgroundTexture);
 
         this.researchList.drawBackground(mouseX, mouseY);
         this.researchSteps.drawBackground(mouseX, mouseY);
@@ -63,6 +63,14 @@ public class DrawPaneResearchTable extends DrawPane {
         this.researchSteps.init();
         this.researchAids.init();
         this.researchTools.init();
+    }
+
+    @Override
+    public void tearDown() {
+        this.researchList.tearDown();
+        this.researchSteps.tearDown();
+        this.researchAids.tearDown();
+        this.researchTools.tearDown();
     }
 
     @Override

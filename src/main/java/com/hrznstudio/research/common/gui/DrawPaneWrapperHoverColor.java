@@ -12,7 +12,7 @@ public class DrawPaneWrapperHoverColor<Content extends DrawPane> extends DrawPan
     @Override
     public void draw(int mouseX, int mouseY) {
         if (containsPoint(mouseX, mouseY))
-            drawRect(color);
+            fill(color);
 
         super.draw(mouseX, mouseY);
     }

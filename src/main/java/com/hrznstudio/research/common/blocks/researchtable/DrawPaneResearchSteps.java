@@ -1,24 +1,34 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
+import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
+import com.hrznstudio.research.api.research.IResearch;
+import com.hrznstudio.research.api.research.IResearchStep;
 import com.hrznstudio.research.api.research.IResearchStepProgress;
 import com.hrznstudio.research.common.gui.DrawPane;
 import com.hrznstudio.research.common.gui.DrawPaneBorder;
 import com.hrznstudio.research.common.gui.DrawPaneCollectionVertical;
+import com.hrznstudio.research.common.gui.Renderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 public class DrawPaneResearchSteps extends DrawPane {
-    private final Collection<DrawPane> stepList = new ArrayList<>();
+    private final PlayerProgress progress;
     private Status status = DrawPaneResearchSteps.Status.NO_RESEARCH;
     private DrawPane header = null;
     private DrawPane body = null;
+    private final Consumer<IResearchStep> stepChangeListener = r -> this.init();
+    private final Consumer<IResearch> researchChangeListener = r -> this.init();
 
-    public DrawPaneResearchSteps(GuiResearchTable guiResearchTable) {
-        super(guiResearchTable);
+    public DrawPaneResearchSteps(Renderer renderer, PlayerProgress progress) {
+        super(renderer);
+        this.progress = progress;
+        this.progress.registerResearchChangeListener(researchChangeListener);
+        this.progress.registerResearchStepChangeListener(stepChangeListener);
     }
 
     @Override
@@ -59,22 +69,23 @@ public class DrawPaneResearchSteps extends DrawPane {
         this.header = new DrawPaneBorder(getSubPane(0, 0, width, heightUnit), 1, 0xff000000);
 
         this.body = getSubPane(0, heightUnit, width, 6 * heightUnit);
-        if (this.guiResearchTable.getSelectedResearch() == null) {
+        if (this.progress.getSelectedResearch() == null) {
             this.status = Status.NO_RESEARCH;
             return;
         }
 
-        final ResearchProgress rProgess = this.guiResearchTable.progress.getProgressFor(this.guiResearchTable.getSelectedResearch());
-        if (rProgess.hasCurrentStep()) {
+        final ResearchProgress rProgress = this.progress.getProgressFor(this.progress.getSelectedResearch());
+        if (rProgress.hasCurrentStep()) {
             this.status = Status.CURRENT_STEP;
-            this.body = rProgess.getCurrentStep().getDrawPane(this.body);
+            this.body = rProgress.getCurrentStep().getDrawPane(this.body, rProgress);
+            body.init();
             return;
         }
 
         final Collection<DrawPane> buttons = new ArrayList<>(6);
         this.status = Status.STEPS;
         for (int i = 0; i < 6; i++) {
-            final DrawPaneResearchStepSingle step = new DrawPaneResearchStepSingle(body.getSubPane(0, i * heightUnit, width, heightUnit), rProgess, i);
+            final DrawPaneResearchStepSingle step = new DrawPaneResearchStepSingle(body.getSubPane(0, i * heightUnit, width, heightUnit), rProgress, i);
             step.init();
             buttons.add(step);
         }
@@ -102,11 +113,20 @@ public class DrawPaneResearchSteps extends DrawPane {
     }
 
     private IResearchStepProgress getCurrentStep() {
-        if (this.guiResearchTable.getSelectedResearch() == null)
+        if (this.progress.getSelectedResearch() == null)
             return null;
-        return this.guiResearchTable.progress.getProgressFor(this.guiResearchTable.getSelectedResearch()).getCurrentStep();
+        return this.progress.getProgressFor(this.progress.getSelectedResearch()).getCurrentStep();
     }
 
+    @Override
+    public void tearDown() {
+        progress.deRegisterResearchChangeListener(researchChangeListener);
+        progress.deRegisterResearchStepChangeListener(stepChangeListener);
+        if (this.body != null)
+            this.body.tearDown();
+        if (this.header != null)
+            this.header.tearDown();
+    }
 
     private enum Status {NO_RESEARCH, STEPS, CURRENT_STEP}
 }

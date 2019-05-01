@@ -1,7 +1,9 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
+import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.common.gui.DrawPane;
 import com.hrznstudio.research.common.gui.DrawPaneCollectionVertical;
+import com.hrznstudio.research.common.gui.Renderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -9,11 +11,13 @@ import java.util.Collection;
 
 @ParametersAreNonnullByDefault
 public class DrawPaneResearchList extends DrawPane {
+    private final PlayerProgress progress;
     //private final Collection<DrawPane> researchButtons = new ArrayList<>(6);
     private DrawPane body, heading;
 
-    public DrawPaneResearchList(GuiResearchTable guiResearchTable) {
-        super(guiResearchTable);
+    public DrawPaneResearchList(Renderer renderer, PlayerProgress progress) {
+        super(renderer);
+        this.progress = progress;
     }
 
     @Override
@@ -24,7 +28,7 @@ public class DrawPaneResearchList extends DrawPane {
 
     @Override
     public void drawBackground(int mouseX, int mouseY) {
-        drawRect(0xabcdefff);
+        fill(0xabcdefff);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class DrawPaneResearchList extends DrawPane {
 
 
         for (int i = 0; i < 6; i++) {
-            researchButtons.add(new DrawPaneResearchListSingle(getSubPane(0, (i + 1) * heightUnit, width, heightUnit), i));
+            researchButtons.add(new DrawPaneResearchListSingle(getSubPane(0, (i + 1) * heightUnit, width, heightUnit), i, progress));
         }
 
         this.body = new DrawPaneCollectionVertical(getSubPane(0, heightUnit, width, 6 * heightUnit), researchButtons);
@@ -46,5 +50,14 @@ public class DrawPaneResearchList extends DrawPane {
     public void handleClick(int mouseX, int mouseY, int mouseButton) {
         if (body.containsPoint(mouseX, mouseY))
             body.handleClick(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void tearDown() {
+        if (this.body != null)
+            this.body.tearDown();
+        if (this.heading != null) {
+            this.heading.tearDown();
+        }
     }
 }

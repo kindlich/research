@@ -32,14 +32,16 @@ public class ResearchProgress {
         return playerProgress;
     }
 
-    public void StartStep(IResearchStep step, IResearchPlace place) {
-        if(!step.canBeStarted(playerProgress, place))
+    public void startStep(IResearchStep step, IResearchPlace place) {
+        if (!step.canBeStarted(playerProgress, place))
             return;
 
-            this.currentStep = step.onStarted(this, place);
+        this.currentStep = step.onStarted(this, place);
+        this.playerProgress.notifyResearchStepChangeListeners(step);
         if (this.currentStep == null) {
             step.onCompleted(this, place);
             this.completedSteps.add(step);
+            this.playerProgress.notifyResearchStepChangeListeners(step);
         }
     }
 
@@ -57,13 +59,16 @@ public class ResearchProgress {
             return false;
 
         if (this.currentStep.canBeCompleted(playerProgress, place)) {
-            this.completedSteps.add(currentStep.getStep());
+            final IResearchStep oldStep = currentStep.getStep();
+            this.completedSteps.add(oldStep);
             this.currentStep.getStep().onCompleted(this, place);
             this.currentStep = null;
+            playerProgress.notifyResearchStepChangeListeners(oldStep);
             return true;
         } else {
             return false;
         }
+
     }
 
 

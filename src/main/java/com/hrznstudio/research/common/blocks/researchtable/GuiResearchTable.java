@@ -3,6 +3,7 @@ package com.hrznstudio.research.common.blocks.researchtable;
 import com.hrznstudio.research.APIMethods;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearch;
+import com.hrznstudio.research.common.gui.Renderer;
 import com.hrznstudio.research.helpers.ContainerResearchTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -25,13 +26,14 @@ public class GuiResearchTable extends GuiContainer {
 
     public GuiResearchTable(TileResearchTable table, EntityPlayer player) {
         super(new ContainerResearchTable(table, player.inventory));
+        final Renderer renderer = new Renderer(this);
         this.table = table;
         this.progress = APIMethods.getProgress(player);
-        this.drawPane = new DrawPaneResearchTable(this,
-                new DrawPaneResearchList(this),
-                new DrawPaneResearchSteps(this),
-                new DrawPaneResearchAids(this),
-                new DrawPaneResearchTools(this, table.getToolSlots())
+        this.drawPane = new DrawPaneResearchTable(renderer,
+                new DrawPaneResearchList(renderer, progress),
+                new DrawPaneResearchSteps(renderer, progress),
+                new DrawPaneResearchAids(renderer, progress),
+                new DrawPaneResearchTools(renderer, table.getToolSlots())
         );
     }
 
@@ -97,5 +99,11 @@ public class GuiResearchTable extends GuiContainer {
 
     public void tableUpdated() {
         this.drawPane.onTableUpdated();
+    }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        drawPane.tearDown();
     }
 }

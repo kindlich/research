@@ -1,8 +1,5 @@
 package com.hrznstudio.research.common.gui;
 
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.I18n;
 import org.jetbrains.annotations.Contract;
 
@@ -15,16 +12,17 @@ public abstract class DrawPane {
     public int startY;
     public int width;
     public int height;
-    protected GuiResearchTable guiResearchTable;
+    //protected GuiResearchTable guiResearchTable;
+    protected Renderer renderer;
 
     @Contract(pure = true)
-    public DrawPane(GuiResearchTable guiResearchTable) {
-        this.guiResearchTable = guiResearchTable;
+    public DrawPane(Renderer renderer) {
+        this.renderer = renderer;
     }
 
     @Contract(pure = true)
     public DrawPane(DrawPane other) {
-        this.guiResearchTable = other.guiResearchTable;
+        this.renderer = other.renderer;
         resize(other.startX, other.startY, other.width, other.height);
     }
 
@@ -33,6 +31,8 @@ public abstract class DrawPane {
     public abstract void drawBackground(int mouseX, int mouseY);
 
     public abstract void init();
+
+    public abstract void tearDown();
 
     public abstract void handleClick(int mouseX, int mouseY, int mouseButton);
 
@@ -48,13 +48,13 @@ public abstract class DrawPane {
     }
 
     public DrawPane getSubPane(int startX, int startY, int width, int height) {
-        final DrawPane drawPane = new DrawPaneBasic(guiResearchTable);
+        final DrawPane drawPane = new DrawPaneBasic(renderer);
         drawPane.resize(this.startX + startX, this.startY + startY, width, height);
         return drawPane;
     }
 
-    public <T extends DrawPane> T getSubPane(int startX, int startY, int width, int height, Function<GuiResearchTable, T> generator) {
-        final T drawPane = generator.apply(guiResearchTable);
+    public <T extends DrawPane> T getSubPane(int startX, int startY, int width, int height, Function<Renderer, T> generator) {
+        final T drawPane = generator.apply(renderer);
         drawPane.resize(this.startX + startX, this.startY + startY, width, height);
         return drawPane;
     }
@@ -69,12 +69,12 @@ public abstract class DrawPane {
 
     public void drawBorder(int color, int size) {
         //Upper and lower border
-        getSubPane(0, 0, width + size, size).drawRect(color);
-        getSubPane(0, height, width + size, size).drawRect(color);
+        getSubPane(0, 0, width + size, size).fill(color);
+        getSubPane(0, height, width + size, size).fill(color);
 
         //Sides
-        getSubPane(0, 0, size, height + size).drawRect(color);
-        getSubPane(width, 0, size, height + size).drawRect(color);
+        getSubPane(0, 0, size, height + size).fill(color);
+        getSubPane(width, 0, size, height + size).fill(color);
     }
 
     public DrawPane drawBorderAndReturnInnerPane(int color, int size, int borderOffset) {
@@ -92,8 +92,9 @@ public abstract class DrawPane {
     }
 
 
-    public void drawRect(int color) {
-        Gui.drawRect(startX, startY, startX + width, startY + height, color);
+    public void fill(int color) {
+        //wRect(startX, startY, startX + width, startY + height, color);
+        this.renderer.drawRect(startX, startY, width, height, color);
     }
 
     public void drawLocalizedText(int color, String localizationKey, Object... parameters) {
@@ -104,17 +105,11 @@ public abstract class DrawPane {
         drawBorder(0xff000000, 1);
 
         final int w = (int) (width * done);
-        getSubPane(1, 1, w, height - 1).drawRect(0xff008000);
+        getSubPane(1, 1, w, height - 1).fill(0xff008000);
     }
 
     public void drawText(int color, String text) {
-        final FontRenderer fontRenderer = guiResearchTable.mc.fontRenderer;
-        final int fontHeightPre = fontRenderer.FONT_HEIGHT;
-        while (fontRenderer.getWordWrappedHeight(text, width) > height) {
-            fontRenderer.FONT_HEIGHT--;
-        }
-        fontRenderer.drawSplitString(text, startX, startY, width, color);
-        fontRenderer.FONT_HEIGHT = fontHeightPre;
+        this.renderer.drawText(startX, startY, width, height, color, text);
     }
 
     public void drawSine(double from, double to, int color, int dotSize) {
@@ -122,7 +117,7 @@ public abstract class DrawPane {
         for (int i = 0; i < this.width; i++) {
             final double functionValue = Math.sin(from + (i * range / width));
             //final int startY = 0;
-            getSubPane(i, (int) ((0.5 * height) * (1.0D - functionValue)), dotSize, dotSize).drawRect(color);
+            getSubPane(i, (int) ((0.5 * height) * (1.0D - functionValue)), dotSize, dotSize).fill(color);
         }
     }
 

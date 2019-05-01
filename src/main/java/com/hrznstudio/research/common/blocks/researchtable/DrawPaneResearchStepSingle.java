@@ -4,7 +4,9 @@ import com.hrznstudio.research.api.player.ResearchProgress;
 import com.hrznstudio.research.api.research.IResearchStep;
 import com.hrznstudio.research.common.gui.DrawPane;
 
-public class DrawPaneResearchStepSingle extends DrawPane {
+import java.util.function.Consumer;
+
+public class DrawPaneResearchStepSingle extends DrawPane{
     private final ResearchProgress progress;
     private final int buttonNumber;
     private IResearchStep step;
@@ -13,7 +15,6 @@ public class DrawPaneResearchStepSingle extends DrawPane {
         super(other);
         this.progress = progress;
         this.buttonNumber = step;
-
     }
 
     @Override
@@ -25,7 +26,7 @@ public class DrawPaneResearchStepSingle extends DrawPane {
         if (step.canBeStarted(progress.getPlayerProgress(), null)) {
             color = containsPoint(mouseX, mouseY) ? 0xff00ffff : 0xff000000;
         } else {
-            color = containsPoint(mouseX, mouseY) ? 0xffff00ff: 0xffff0000;
+            color = containsPoint(mouseX, mouseY) ? 0xffff00ff : 0xffff0000;
         }
         this.drawBorderAndReturnInnerPane(0xff000000, 1, 1).drawLocalizedText(color, step.getId().getPath());
     }
@@ -38,16 +39,19 @@ public class DrawPaneResearchStepSingle extends DrawPane {
     @Override
     public void init() {
         final Object[] objects = progress.getAvailableSteps().toArray();
-        if(objects.length > buttonNumber)
+        if (objects.length > buttonNumber)
             this.step = (IResearchStep) objects[buttonNumber];
     }
 
     @Override
     public void handleClick(int mouseX, int mouseY, int mouseButton) {
         if (step != null && containsPoint(mouseX, mouseY)) {
-            progress.StartStep(step, null);
-            //this.init();
-            guiResearchTable.tableUpdated();
+            progress.startStep(step, null);
         }
+    }
+
+
+    @Override
+    public void tearDown() {
     }
 }

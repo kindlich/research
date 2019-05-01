@@ -1,5 +1,6 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
+import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearch;
 import com.hrznstudio.research.common.gui.DrawPane;
 import org.jetbrains.annotations.Nullable;
@@ -7,15 +8,17 @@ import org.jetbrains.annotations.Nullable;
 public class DrawPaneResearchListSingle extends DrawPane {
 
     private final int i;
+    private final PlayerProgress progress;
 
-    public DrawPaneResearchListSingle(DrawPane other, int i) {
+    public DrawPaneResearchListSingle(DrawPane other, int i, PlayerProgress progress) {
         super(other);
         this.i = i;
+        this.progress = progress;
     }
 
     @Nullable
     private IResearch getResearch() {
-        final Object[] availableResearches = guiResearchTable.progress.getAvailableResearches().toArray();
+        final Object[] availableResearches = progress.getAvailableResearches().toArray();
         return availableResearches.length <= i ? null : (IResearch) availableResearches[i];
     }
 
@@ -44,7 +47,12 @@ public class DrawPaneResearchListSingle extends DrawPane {
 
     @Override
     public void handleClick(int mouseX, int mouseY, int mouseButton) {
-        guiResearchTable.setSelectedResearch(getResearch());
+        progress.setSelectedResearch(getResearch());
+    }
+
+    @Override
+    public void tearDown() {
+
     }
 
 }

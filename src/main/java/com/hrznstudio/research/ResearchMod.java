@@ -3,7 +3,7 @@ package com.hrznstudio.research;
 import com.hrznstudio.research.api.research.IResearchStep;
 import com.hrznstudio.research.helpers.LinearResearch;
 import com.hrznstudio.research.helpers.SimpleResearchStep;
-import com.hrznstudio.research.helpers.SimpleResearchStepProgress;
+import com.hrznstudio.research.helpers.ResearchStepProgressSineMiniGame;
 import com.hrznstudio.research.helpers.SimpleResearchStepWithProgress;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +38,7 @@ public class ResearchMod {
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step1")));
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step2")));
         steps.add(new SimpleResearchStep(new ResourceLocation("research", "step3")));
-        steps.add(new SimpleResearchStepWithProgress(new ResourceLocation("research", "step4"), (s, p) -> new SimpleResearchStepProgress(s)));
+        steps.add(new SimpleResearchStepWithProgress(new ResourceLocation("research", "step4"), (s, p) -> new ResearchStepProgressSineMiniGame(s)));
 
         APIMethods.registerResearch(new LinearResearch(researchId, table, steps));
         APIMethods.registerResearch(new LinearResearch(researchId, table, steps));

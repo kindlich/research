@@ -1,16 +1,9 @@
 package com.hrznstudio.research.common.gui;
 
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
-
 import java.util.Collection;
 
 public class DrawPaneCollectionVertical extends DrawPane {
     private final Collection<DrawPane> children;
-
-    public DrawPaneCollectionVertical(GuiResearchTable guiResearchTable, Collection<DrawPane> children) {
-        super(guiResearchTable);
-        this.children = children;
-    }
 
     public DrawPaneCollectionVertical(DrawPane other, Collection<DrawPane> children) {
         super(other);
@@ -34,6 +27,13 @@ public class DrawPaneCollectionVertical extends DrawPane {
     public void init() {
         for (DrawPane child : children)
             child.init();
+    }
+
+    @Override
+    public void tearDown() {
+        for (DrawPane child : children) {
+            child.tearDown();
+        }
     }
 
     @Override

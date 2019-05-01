@@ -24,6 +24,11 @@ public class DrawPaneAidBattery extends DrawPane {
     }
 
     @Override
+    public void tearDown() {
+
+    }
+
+    @Override
     public void draw(int mouseX, int mouseY) {
         if (name == null || body == null)
             return;

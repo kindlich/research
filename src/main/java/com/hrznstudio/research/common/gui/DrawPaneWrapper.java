@@ -5,7 +5,7 @@ public abstract class DrawPaneWrapper<Content extends DrawPane> extends DrawPane
     protected final Content content;
 
     public DrawPaneWrapper(Content content) {
-        super(content.guiResearchTable);
+        super(content);
         this.content = content;
         this.resize(content.startX, content.startY, content.width, content.height);
     }
@@ -41,5 +41,8 @@ public abstract class DrawPaneWrapper<Content extends DrawPane> extends DrawPane
         return content.containsPoint(x, y);
     }
 
-
+    @Override
+    public void tearDown() {
+        content.tearDown();
+    }
 }

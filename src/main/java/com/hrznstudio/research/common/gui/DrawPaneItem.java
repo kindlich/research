@@ -1,7 +1,5 @@
 package com.hrznstudio.research.common.gui;
 
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -10,19 +8,15 @@ public class DrawPaneItem extends DrawPane {
     private final ItemStackHandler inventory;
     private final int inventorySlot;
 
-    public DrawPaneItem(GuiResearchTable guiResearchTable, ItemStackHandler inventory, int inventorySlot) {
-        super(guiResearchTable);
+    public DrawPaneItem(Renderer renderer, ItemStackHandler inventory, int inventorySlot) {
+        super(renderer);
         this.inventory = inventory;
         this.inventorySlot = inventorySlot;
     }
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        final ItemStack item = getStack();
-        final RenderItem renderItem = guiResearchTable.mc.getRenderItem();
-
-        renderItem.renderItemAndEffectIntoGUI(guiResearchTable.mc.player, item, startX, startY);
-        renderItem.renderItemOverlayIntoGUI(guiResearchTable.mc.fontRenderer, item, startX, startY, null);
+        renderer.drawItemStack(startX, startY, width, height, getStack());
         drawBorder(0xff000000, 2);
 
     }
@@ -34,6 +28,11 @@ public class DrawPaneItem extends DrawPane {
 
     @Override
     public void init() {
+
+    }
+
+    @Override
+    public void tearDown() {
 
     }
 

@@ -1,9 +1,9 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
 import com.hrznstudio.research.common.gui.DrawPane;
 import com.hrznstudio.research.common.gui.DrawPaneItem;
 import com.hrznstudio.research.common.gui.DrawPaneWrapperHoverColor;
+import com.hrznstudio.research.common.gui.Renderer;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -16,8 +16,8 @@ public class DrawPaneResearchTools extends DrawPane {
     private final ItemStackHandler itemStackHandler;
     private final Collection<DrawPaneWrapperHoverColor<DrawPaneItem>> toolSlots = new ArrayList<>();
 
-    public DrawPaneResearchTools(GuiResearchTable guiResearchTable, ItemStackHandler itemStackHandler) {
-        super(guiResearchTable);
+    public DrawPaneResearchTools(Renderer renderer, ItemStackHandler itemStackHandler) {
+        super(renderer);
         this.itemStackHandler = itemStackHandler;
     }
 
@@ -32,7 +32,7 @@ public class DrawPaneResearchTools extends DrawPane {
     @Override
     public void drawBackground(int mouseX, int mouseY) {
         drawBorder(0xffffffff);
-        //drawRect(0xabcdefff);
+        //fill(0xabcdefff);
 
         for (DrawPaneWrapperHoverColor<DrawPaneItem> subPane : toolSlots) {
             subPane.drawBackground(mouseX, mouseY);
@@ -51,6 +51,13 @@ public class DrawPaneResearchTools extends DrawPane {
 
             final DrawPaneWrapperHoverColor<DrawPaneItem> hoverItem = new DrawPaneWrapperHoverColor<>(subPane, 0xff345678);
             toolSlots.add(hoverItem);
+        }
+    }
+
+    @Override
+    public void tearDown() {
+        for (DrawPaneWrapperHoverColor<DrawPaneItem> toolSlot : toolSlots) {
+            toolSlot.tearDown();
         }
     }
 
