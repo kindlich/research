@@ -1,6 +1,5 @@
 package com.hrznstudio.research.helpers;
 
-import com.hrznstudio.research.api.gui.DrawTool;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
@@ -10,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 
 public class SimpleResearchStep implements IResearchStep {
     private final ResourceLocation id;
@@ -30,17 +28,17 @@ public class SimpleResearchStep implements IResearchStep {
         return this.id;
     }
 
-    @Override
-    public Rectangle drawInfo(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        drawTool.drawLocalizedText(getId().getPath());
-        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
-    }
-
-    @Override
-    public Rectangle drawContent(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
-        drawTool.drawLocalizedText(getId().getPath());
-        return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
-    }
+    //@Override
+    //public Rectangle drawInfo(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
+    //    drawTool.drawLocalizedText(getId().getPath());
+    //    return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
+    //}
+//
+    //@Override
+    //public Rectangle drawContent(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize) {
+    //    drawTool.drawLocalizedText(getId().getPath());
+    //    return new Rectangle(maximumSize.x, maximumSize.y, maximumSize.width, 14);
+    //}
 
     @Override
     public boolean canBeStarted(PlayerProgress progress, IResearchPlace place) {

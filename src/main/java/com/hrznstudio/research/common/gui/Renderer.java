@@ -3,6 +3,8 @@ package com.hrznstudio.research.common.gui;
 import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -10,10 +12,10 @@ import org.jetbrains.annotations.Contract;
 
 public class Renderer {
 
-    private final GuiResearchTable guiResearchTable;
+    private final GuiContainer guiResearchTable;
 
     @Contract(pure = true)
-    public Renderer(GuiResearchTable guiResearchTable) {
+    public Renderer(GuiContainer guiResearchTable) {
         this.guiResearchTable = guiResearchTable;
     }
 
@@ -41,6 +43,5 @@ public class Renderer {
     public void drawTexture(int startX, int startY, int width, int height, ResourceLocation location) {
         guiResearchTable.mc.renderEngine.bindTexture(location);
         Gui.drawModalRectWithCustomSizedTexture(startX, startY, 0, 0, width, height, width, height);
-
     }
 }

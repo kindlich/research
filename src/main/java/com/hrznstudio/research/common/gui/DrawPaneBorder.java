@@ -13,5 +13,5 @@ public class DrawPaneBorder extends DrawPaneWrapper<DrawPane> {
     public void draw(int mouseX, int mouseY) {
         drawBorder(color, size);
         super.draw(mouseX, mouseY);
-    }
+    } 
 }
