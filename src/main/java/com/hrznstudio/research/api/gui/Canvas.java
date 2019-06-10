@@ -22,7 +22,7 @@ public abstract class Canvas {
     protected double width;
     private boolean active = true;
 
-    protected Canvas(Canvas parent, double width, double height) {
+    public Canvas(Canvas parent, double width, double height) {
         this.renderer = parent.renderer;
         this.width = width;
         this.height = height;
@@ -31,7 +31,7 @@ public abstract class Canvas {
     }
 
     @Contract(pure = true)
-    protected Canvas(Renderer renderer, IResearchPlace place, double absoluteX, double absoluteY, double width, double height) {
+    public Canvas(Renderer renderer, IResearchPlace place, double absoluteX, double absoluteY, double width, double height) {
         this.renderer = renderer;
         this.absoluteX = absoluteX;
         this.absoluteY = absoluteY;
@@ -172,7 +172,7 @@ public abstract class Canvas {
         return (int) width;
     }
 
-    protected void clearChildren() {
+    public void clearChildren() {
         final Iterator<Canvas> iterator = this.children.iterator();
         while (iterator.hasNext()) {
             final Canvas next = iterator.next();

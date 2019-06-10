@@ -1,5 +1,7 @@
-package com.hrznstudio.research.api.gui;
+package com.hrznstudio.research.common.blocks.researchtable.gui;
 
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasArrow;
 import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
 import org.jetbrains.annotations.Contract;
 
@@ -10,7 +12,7 @@ public class CanvasResearchTools extends Canvas {
     private int slotCount;
 
 
-    protected CanvasResearchTools(Canvas parent, double width, double height, ItemStackHandlerResearchTable slots) {
+    public CanvasResearchTools(Canvas parent, double width, double height, ItemStackHandlerResearchTable slots) {
         super(parent, width, height);
         this.slots = slots;
         //init();

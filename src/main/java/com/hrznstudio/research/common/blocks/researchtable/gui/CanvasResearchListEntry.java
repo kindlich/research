@@ -1,6 +1,8 @@
-package com.hrznstudio.research.api.gui;
+package com.hrznstudio.research.common.blocks.researchtable.gui;
 
 import com.hrznstudio.research.APIMethods;
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearch;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +16,7 @@ public class CanvasResearchListEntry extends Canvas {
 
     private IResearch research;
 
-    protected CanvasResearchListEntry(Canvas parent, double width, double height, int buttonNo, EntityPlayer player) {
+    public CanvasResearchListEntry(Canvas parent, double width, double height, int buttonNo, EntityPlayer player) {
         super(parent, width, height);
         this.buttonNo = buttonNo;
         this.progress = APIMethods.getProgress(player);

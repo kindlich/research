@@ -1,5 +1,7 @@
-package com.hrznstudio.research.api.gui;
+package com.hrznstudio.research.common.blocks.researchtable.gui;
 
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 import net.minecraft.entity.player.EntityPlayer;
 import org.jetbrains.annotations.Contract;
@@ -9,7 +11,7 @@ public class CanvasResearchList extends Canvas {
     private final TileResearchTable table;
     private final EntityPlayer player;
 
-    protected CanvasResearchList(Canvas parent, double width, double height, TileResearchTable table, EntityPlayer player) {
+    public CanvasResearchList(Canvas parent, double width, double height, TileResearchTable table, EntityPlayer player) {
         super(parent, width, height);
         this.table = table;
         this.player = player;

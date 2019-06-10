@@ -1,14 +1,16 @@
-package com.hrznstudio.research.api.gui;
+package com.hrznstudio.research.common.blocks.researchtable.gui;
 
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasBorder;
+import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.research.IResearchAid;
-import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 
 public class CanvasResearchAids extends Canvas {
 
     private IResearchAid selectedAid;
     private Canvas canvasContent;
 
-    protected CanvasResearchAids(Canvas parent, double width, double height) {
+    public CanvasResearchAids(Canvas parent, double width, double height) {
         super(parent, width, height);
     }
 

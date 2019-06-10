@@ -5,7 +5,7 @@ public class CanvasBorder extends Canvas {
     private final int borderColor;
     private final int borderSize;
 
-    protected CanvasBorder(Canvas parent, double width, double height, int borderColor, int borderSize) {
+    public CanvasBorder(Canvas parent, double width, double height, int borderColor, int borderSize) {
         super(parent, width, height);
         this.borderColor = borderColor;
         this.borderSize = borderSize;

@@ -1,6 +1,9 @@
-package com.hrznstudio.research.api.gui;
+package com.hrznstudio.research.common.blocks.researchtable.gui;
 
 import com.hrznstudio.research.ResearchMod;
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasConstructors;
+import com.hrznstudio.research.api.gui.CanvasMouse;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 import com.hrznstudio.research.common.gui.Renderer;

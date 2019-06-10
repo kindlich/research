@@ -8,7 +8,7 @@ public class CanvasAidBattery extends Canvas {
     private double progress;
 
 
-    protected CanvasAidBattery(Canvas parent, double width, double height) {
+    public CanvasAidBattery(Canvas parent, double width, double height) {
         super(parent, width, height);
     }
 

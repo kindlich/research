@@ -1,7 +1,7 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
 import com.hrznstudio.research.APIMethods;
-import com.hrznstudio.research.api.gui.CanvasResearchTable;
+import com.hrznstudio.research.common.blocks.researchtable.gui.CanvasResearchTable;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearch;
 import com.hrznstudio.research.common.gui.Renderer;

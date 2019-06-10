@@ -1,7 +1,7 @@
 package com.hrznstudio.research.helpers;
 
 import com.hrznstudio.research.api.gui.CanvasConstructors;
-import com.hrznstudio.research.api.gui.CanvasResearchStep;
+import com.hrznstudio.research.common.blocks.researchtable.gui.CanvasResearchStep;
 import com.hrznstudio.research.api.gui.SharedCanvas;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;

@@ -4,7 +4,7 @@ public class CanvasText extends Canvas {
     private final String text;
     private final int color;
 
-    protected CanvasText(Canvas parent, double width, double height, String text, int color) {
+    public CanvasText(Canvas parent, double width, double height, String text, int color) {
         super(parent, width, height);
         this.text = text;
         this.color = color;

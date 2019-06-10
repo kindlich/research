@@ -8,7 +8,7 @@ public class CanvasMouse extends Canvas {
 
     private final ItemStackHandlerResearchTable toolSlots;
 
-    protected CanvasMouse(Renderer renderer, IResearchPlace place, double width, double height, ItemStackHandlerResearchTable toolSlots) {
+    public CanvasMouse(Renderer renderer, IResearchPlace place, double width, double height, ItemStackHandlerResearchTable toolSlots) {
         super(renderer, place, 0, 0, width, height);
         this.toolSlots = toolSlots;
     }

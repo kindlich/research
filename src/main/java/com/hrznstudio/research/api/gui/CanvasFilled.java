@@ -3,7 +3,7 @@ package com.hrznstudio.research.api.gui;
 public class CanvasFilled extends Canvas {
     private final int color;
 
-    protected CanvasFilled(Canvas parent, double width, double height, int color) {
+    public CanvasFilled(Canvas parent, double width, double height, int color) {
         super(parent, width, height);
         this.color = color;
     }

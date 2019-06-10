@@ -7,7 +7,7 @@ public class CanvasItemHolder extends Canvas {
     private final ItemStackHandlerResearchTable items;
     private int slot;
 
-    protected CanvasItemHolder(Canvas parent, double width, double height, ItemStackHandlerResearchTable items, int slot) {
+    public CanvasItemHolder(Canvas parent, double width, double height, ItemStackHandlerResearchTable items, int slot) {
         super(parent, width, height);
         this.items = items;
         this.slot = slot;
