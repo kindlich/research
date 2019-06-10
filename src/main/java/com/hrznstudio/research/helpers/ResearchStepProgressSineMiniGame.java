@@ -5,13 +5,9 @@ import com.hrznstudio.research.api.gui.CanvasBorder;
 import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
-import com.hrznstudio.research.api.player.ResearchProgress;
 import com.hrznstudio.research.api.research.IResearchStep;
 import com.hrznstudio.research.api.research.IResearchStepProgress;
-import com.hrznstudio.research.common.gui.DrawPane;
 import org.jetbrains.annotations.Contract;
-
-import java.util.Random;
 
 public class ResearchStepProgressSineMiniGame implements IResearchStepProgress {
 
@@ -36,11 +32,6 @@ public class ResearchStepProgressSineMiniGame implements IResearchStepProgress {
     @Override
     public IResearchStep getStep() {
         return step;
-    }
-
-    @Override
-    public DrawPane getDrawPane(DrawPane parent, ResearchProgress progress) {
-        return new DrawPaneSineMiniGame(parent, progress, this);
     }
 
     @Override

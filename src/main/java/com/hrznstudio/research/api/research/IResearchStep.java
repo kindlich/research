@@ -21,12 +21,6 @@ public interface IResearchStep {
 
     ResourceLocation getId();
 
-
-    ////GUI
-    //Rectangle drawInfo(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize);
-//
-    //Rectangle drawContent(DrawTool drawTool, PlayerProgress playerProgress, Rectangle maximumSize);
-
     /**
      * Return a canvas that should be added to the parent canvas.
      * Return null if the space would not fit.
