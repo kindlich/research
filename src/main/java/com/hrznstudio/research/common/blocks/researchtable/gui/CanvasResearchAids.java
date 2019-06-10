@@ -1,11 +1,12 @@
 package com.hrznstudio.research.common.blocks.researchtable.gui;
 
+import com.hrznstudio.research.api.gui.AbstractCanvasStructure;
 import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.gui.CanvasBorder;
 import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.research.IResearchAid;
 
-public class CanvasResearchAids extends Canvas {
+public class CanvasResearchAids extends AbstractCanvasStructure {
 
     private IResearchAid selectedAid;
     private Canvas canvasContent;
@@ -23,16 +24,6 @@ public class CanvasResearchAids extends Canvas {
 
         canvasContent = getSubCanvas(0, hUnit, width, 4 * hUnit, CanvasConstructors.getBorder(1, 0xff000000));//.getInnerCanvas(2.5D);
         aidChanged();
-    }
-
-    @Override
-    protected void drawContent(int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    protected void drawBackgroundContent(int mouseX, int mouseY) {
-
     }
 
     public void aidChanged() {

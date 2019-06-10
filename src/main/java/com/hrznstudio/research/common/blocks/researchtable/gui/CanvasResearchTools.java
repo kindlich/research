@@ -1,11 +1,12 @@
 package com.hrznstudio.research.common.blocks.researchtable.gui;
 
+import com.hrznstudio.research.api.gui.AbstractCanvasStructure;
 import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.gui.CanvasArrow;
 import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
 import org.jetbrains.annotations.Contract;
 
-public class CanvasResearchTools extends Canvas {
+public class CanvasResearchTools extends AbstractCanvasStructure {
 
     private final ItemStackHandlerResearchTable slots;
     private int slotOffset = 0;
@@ -65,14 +66,6 @@ public class CanvasResearchTools extends Canvas {
             final int offsetX = startXOff + 20 * i + 20;
             this.addChild(new CanvasItemHolderOffset(this, offsetX, 0, 18, 18, i), offsetX, 0);
         }
-    }
-
-    @Override
-    protected void drawContent(int mouseX, int mouseY) {
-    }
-
-    @Override
-    protected void drawBackgroundContent(int mouseX, int mouseY) {
     }
 
     @Override

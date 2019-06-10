@@ -1,6 +1,7 @@
 package com.hrznstudio.research.common.blocks.researchtable.gui;
 
 import com.hrznstudio.research.APIMethods;
+import com.hrznstudio.research.api.gui.AbstractCanvasStructure;
 import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.gui.SharedCanvas;
@@ -13,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-public class CanvasResearchStepList extends Canvas {
+public class CanvasResearchStepList extends AbstractCanvasStructure {
 
     private final TileResearchTable table;
     private final PlayerProgress progress;
@@ -30,12 +31,8 @@ public class CanvasResearchStepList extends Canvas {
     }
 
     @Override
-    protected void drawContent(int mouseX, int mouseY) {
-
-    }
-
-    @Override
     protected void drawBackgroundContent(int mouseX, int mouseY) {
+        //TODO Remove
         this.renderer.drawRect(getAbsX(), getAbsY(), getWidth(), getHeight(), 0xddabcdef);
     }
 
