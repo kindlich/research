@@ -14,8 +14,8 @@ public class PlayerProgress {
     private final EntityPlayer player;
     private final Map<IResearch, ResearchProgress> progressMap;
     private final Collection<IResearch> completedResearches;
-    private final Collection<Consumer<IResearch>> researchChangeListeners = new HashSet<>();
-    private final Collection<Consumer<IResearchStep>> researchStepChangeListeners = new HashSet<>();
+    private final Collection<Consumer<? super IResearch>> researchChangeListeners = new HashSet<>();
+    private final Collection<Consumer<? super IResearchStep>> researchStepChangeListeners = new HashSet<>();
     private IResearch selectedResearch = null;
 
     @Contract(pure = true)
@@ -43,7 +43,7 @@ public class PlayerProgress {
         return progressMap.computeIfAbsent(research, r -> new ResearchProgress(r, this));
     }
 
-    public Collection<IResearch> getAvailableResearches() {
+    public List<IResearch> getAvailableResearches() {
         return APIMethods.getAllResearches().stream()
                 .filter(r -> r.isVisibleTo(this))
                 .collect(Collectors.toList());
@@ -63,29 +63,29 @@ public class PlayerProgress {
     }
 
     public void notifyResearchChangeListeners(IResearch research) {
-        for (Consumer<IResearch> listener : researchChangeListeners) {
+        for (Consumer<? super IResearch> listener : researchChangeListeners) {
             listener.accept(research);
         }
     }
 
-    public void registerResearchChangeListener(Consumer<IResearch> listener) {
+    public void registerResearchChangeListener(Consumer<? super IResearch> listener) {
         researchChangeListeners.add(listener);
     }
 
-    public void deRegisterResearchChangeListener(Consumer<IResearch> listener) {
+    public void deRegisterResearchChangeListener(Consumer<? super IResearch> listener) {
         researchChangeListeners.remove(listener);
     }
 
-    public void registerResearchStepChangeListener(Consumer<IResearchStep> listener) {
+    public void registerResearchStepChangeListener(Consumer<? super IResearchStep> listener) {
         researchStepChangeListeners.add(listener);
     }
 
-    public void deRegisterResearchStepChangeListener(Consumer<IResearchStep> listener) {
+    public void deRegisterResearchStepChangeListener(Consumer<? super IResearchStep> listener) {
         researchStepChangeListeners.remove(listener);
     }
 
     public void notifyResearchStepChangeListeners(IResearchStep research) {
-        for (Consumer<IResearchStep> listener : researchStepChangeListeners) {
+        for (Consumer<? super IResearchStep> listener : researchStepChangeListeners) {
             listener.accept(research);
         }
     }

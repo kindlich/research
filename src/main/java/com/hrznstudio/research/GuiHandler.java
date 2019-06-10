@@ -1,6 +1,5 @@
 package com.hrznstudio.research;
 
-import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable;
 import com.hrznstudio.research.common.blocks.researchtable.GuiResearchTable2;
 import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 import com.hrznstudio.research.helpers.ContainerResearchTable;
@@ -24,7 +23,7 @@ public class GuiHandler implements IGuiHandler {
         //Replace with switch if bigger
         if(GUIs.values()[ID] == GUIs.ResearchTable) {
             if(tile instanceof TileResearchTable)
-                return new ContainerResearchTable((TileResearchTable) tile, player.inventory);
+                return new ContainerResearchTable();
         }
         return null;
     }

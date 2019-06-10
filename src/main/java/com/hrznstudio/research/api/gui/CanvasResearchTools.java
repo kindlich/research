@@ -1,58 +1,76 @@
 package com.hrznstudio.research.api.gui;
 
-import com.hrznstudio.research.ResearchMod;
 import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Contract;
 
 public class CanvasResearchTools extends Canvas {
 
     private final ItemStackHandlerResearchTable slots;
-    private Canvas arrowLeft, arrowRight;
     private int slotOffset = 0;
     private int slotCount;
 
 
-    protected CanvasResearchTools(Canvas parent, double offsetX, double offsetY, double width, double height, ItemStackHandlerResearchTable slots) {
-        super(parent, offsetX, offsetY, width, height);
+    protected CanvasResearchTools(Canvas parent, double width, double height, ItemStackHandlerResearchTable slots) {
+        super(parent, width, height);
         this.slots = slots;
+        //init();
     }
 
     @Override
-    public void init() {
-        this.slotCount = ((int) (this.width / 18)) - 2;
+    public void initContent() {
+        this.clearChildren();
+
+        this.slotCount = ((int) (this.width / 20)) - 2;
         if (slotCount < 1) {
-            throw new IllegalStateException();
+            return;
         }
 
-        arrowLeft = new CanvasArrow(this, 2, 0, 16, 16, false);
-        arrowRight = new CanvasArrow(this, (slotCount + 1) * 18, 0, 16, 16, true);
+        Canvas arrowLeft = new CanvasArrow(this, 16, 16, CanvasArrow.Direction.LEFT) {
+            @Override
+            public void handleClick(int mouseX, int mouseY, int mouseButton) {
+                slotOffset = (slotOffset <= 0 ? slots.getSizeToolSlots() : slotOffset) - 1;
+            }
+        };
+        Canvas arrowRight = new CanvasArrow(this, 16, 16, CanvasArrow.Direction.RIGHT) {
+            @Override
+            public void handleClick(int mouseX, int mouseY, int mouseButton) {
+                slotOffset = (slotOffset + 1) % slots.getSizeToolSlots();
+            }
+        };
+
+
+        this.addChild(arrowLeft, 2, 1);
+        this.addChild(arrowRight, (slotCount + 1) * 20, 1);
+
+
+
+        final int startXOff;// = 0;
 
         if (slotCount >= slots.getSizeToolSlots()) {
-            arrowLeft.active = false;
-            arrowRight.active = false;
+            arrowLeft.setActive(false);
+            arrowRight.setActive(false);
+            startXOff = ((slotCount - slots.getSizeToolSlots()) / 2) * 20;
         } else {
-            arrowLeft.active = true;
-            arrowRight.active = true;
+            arrowLeft.setActive(true);
+            arrowRight.setActive(true);
+            startXOff = 0;
         }
 
         final int min = Math.min(slotCount, slots.getSizeToolSlots());
 
 
         for (int i = 0; i < min; i++) {
-            //getSubCanvas(18 * i + 18, 0, 16, 16, CanvasConstructors.getConstructor(CanvasItemHolder.class, slots, slots.getToolSlotId(i)));
-            new CanvasItemHolderOffset(this, 18 * i + 18, 0, 16, 16, i);
+            final int offsetX = startXOff + 20 * i + 20;
+            this.addChild(new CanvasItemHolderOffset(this, offsetX, 0, 18, 18, i), offsetX, 0);
         }
-
-        super.init();
     }
 
     @Override
-    void drawContent(int mouseX, int mouseY) {
+    protected void drawContent(int mouseX, int mouseY) {
     }
 
     @Override
-    void drawBackgroundContent(int mouseX, int mouseY) {
+    protected void drawBackgroundContent(int mouseX, int mouseY) {
     }
 
     @Override
@@ -60,11 +78,11 @@ public class CanvasResearchTools extends Canvas {
         if (slots == null)
             return super.moveAndResize(absoluteX, absoluteY, width, height);
 
-        final int nSlotCount = ((int) (width / 18)) - 2;
+        final int nSlotCount = ((int) (width / 20)) - 2;
         if (this.slotCount == nSlotCount) {
             return super.moveAndResize(absoluteX, absoluteY, width, height);
         }
-        this.getChildren().clear();
+        this.clearChildren();
 
         this.absoluteX = absoluteX;
         this.absoluteY = absoluteY;
@@ -76,64 +94,45 @@ public class CanvasResearchTools extends Canvas {
         return true;
     }
 
-    private static class CanvasArrow extends Canvas {
-
-        private static final ResourceLocation arrowLeftLocation = new ResourceLocation(ResearchMod.MODID, "textures/gui/container/left.png");
-        private static final ResourceLocation arrowRightLocation = new ResourceLocation(ResearchMod.MODID, "textures/gui/container/right.png");
-
-        private final CanvasResearchTools parent;
-        private final boolean adding;
-
-        private CanvasArrow(Canvas parent, double offsetX, double offsetY, double width, double height, boolean adding) {
-            super(parent, offsetX, offsetY, width, height);
-            this.parent = (CanvasResearchTools) parent;
-            this.adding = adding;
-        }
-
-        @Override
-        void drawContent(int mouseX, int mouseY) {
-        }
-
-        @Override
-        void drawBackgroundContent(int mouseX, int mouseY) {
-            renderer.drawTexture(this.getAbsX(), this.getAbsY(), this.getWidth(), this.getHeight(), adding ? arrowRightLocation : arrowLeftLocation);
-        }
-
-        @Override
-        public void handleClick(int mouseX, int mouseY, int mouseButton) {
-            if (adding)
-                parent.slotOffset = (parent.slotOffset + 1) % parent.slots.getSizeToolSlots();
-            else
-                parent.slotOffset = (parent.slotOffset <= 0 ? parent.slots.getSizeToolSlots() : parent.slotOffset) - 1;
-        }
-    }
-
     private static class CanvasItemHolderOffset extends Canvas {
 
         private final CanvasResearchTools parent;
         private final int slot;
 
         private CanvasItemHolderOffset(Canvas parent, double offsetX, double offsetY, double width, double height, int slot) {
-            super(parent, offsetX, offsetY, width, height);
+            super(parent, width, height);
             this.parent = (CanvasResearchTools) parent;
             this.slot = slot;
         }
 
         @Override
-        void drawContent(int mouseX, int mouseY) {
-            renderer.drawItemStack(this.getAbsX(), this.getAbsY(), this.getWidth(), this.getHeight(), parent.slots.getToolSlot(getSlotId()));
+        protected void drawContent(int mouseX, int mouseY) {
+            //Top/Bottom
+            renderer.drawRect(getAbsX(), getAbsY(), getWidth(), 1, 0xff000000);
+            renderer.drawRect(getAbsX(), getAbsY() + getHeight(), getWidth(), 1, 0xff000000);
+
+            //Sides
+            renderer.drawRect(getAbsX(), getAbsY(), 1, getHeight(), 0xff000000);
+            renderer.drawRect(getAbsX() + getWidth(), getAbsY(), 1, getHeight() + 1, 0xff000000);
+
+            renderer.drawItemStack(this.getAbsX() + 1, this.getAbsY() + 1, this.getWidth() - 2, this.getHeight() - 2, parent.slots.getToolSlot(getSlotId()));
         }
 
         @Override
-        void drawBackgroundContent(int mouseX, int mouseY) {
+        protected void drawBackgroundContent(int mouseX, int mouseY) {
             if (containsAbsolutePoint(mouseX, mouseY))
                 renderer.drawRect(getAbsX(), getAbsY(), getWidth(), getHeight(), 0x89abcdef);
         }
 
         @Override
+        protected void initContent() {
+
+        }
+
+        @Override
         public void handleClick(int mouseX, int mouseY, int mouseButton) {
             if (containsAbsolutePoint(mouseX, mouseY))
-                parent.slots.clickSlot(getSlotId());
+                parent.slots.clickSlot(getSlotId(), mouseButton);
         }
 
         @Contract(pure = true)

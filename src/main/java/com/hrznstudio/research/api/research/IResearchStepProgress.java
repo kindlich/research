@@ -1,5 +1,6 @@
 package com.hrznstudio.research.api.research;
 
+import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
@@ -13,4 +14,6 @@ public interface IResearchStepProgress extends Serializable {
     IResearchStep getStep();
 
     DrawPane getDrawPane(DrawPane parent, ResearchProgress progress);
+
+    void attachCanvas(Canvas canvasContent);
 }

@@ -1,5 +1,8 @@
 package com.hrznstudio.research.helpers;
 
+import com.hrznstudio.research.api.gui.CanvasConstructors;
+import com.hrznstudio.research.api.gui.CanvasResearchStep;
+import com.hrznstudio.research.api.gui.SharedCanvas;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
@@ -26,6 +29,12 @@ public class SimpleResearchStep implements IResearchStep {
     @Override
     public ResourceLocation getId() {
         return this.id;
+    }
+
+    @Override
+    public void attachCanvas(SharedCanvas parentCanvas) {
+        //parentCanvas.getSubCanvas(0, 0, parentCanvas.getWidth(), parentCanvas.getHeight() / parentCanvas.getExpectedCanvasCount(), CanvasConstructors.getText(this.id.toString(), 0xff000000));
+        parentCanvas.getSubCanvas(0, 0, parentCanvas.getWidth(), parentCanvas.getHeight() / parentCanvas.getExpectedCanvasCount(), CanvasConstructors.getConstructorTypes(CanvasResearchStep.class, new Object[]{this}, IResearchStep.class));
     }
 
     //@Override

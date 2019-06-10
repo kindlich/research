@@ -1,37 +1,43 @@
 package com.hrznstudio.research.api.gui;
 
+import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.common.gui.Renderer;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 @ParametersAreNonnullByDefault
 public abstract class Canvas {
+    public static final int buttonLeft = 0, buttonRight = 1;
+
     protected final Renderer renderer;
+    protected final IResearchPlace place;
     private final Collection<Canvas> children = new HashSet<>();
     protected double absoluteX;
     protected double absoluteY;
     protected double height;
     protected double width;
-    protected boolean active = true;
+    private boolean active = true;
 
-    protected Canvas(Canvas parent, double offsetX, double offsetY, double width, double height) {
+    protected Canvas(Canvas parent, double width, double height) {
         this.renderer = parent.renderer;
         this.width = width;
         this.height = height;
-
-        parent.addChild(this, offsetX, offsetY);
+        this.place = parent.place;
+        //parent.addChild(this, offsetX, offsetY);
     }
 
     @Contract(pure = true)
-    protected Canvas(Renderer renderer, double absoluteX, double absoluteY, double width, double height) {
+    protected Canvas(Renderer renderer, IResearchPlace place, double absoluteX, double absoluteY, double width, double height) {
         this.renderer = renderer;
         this.absoluteX = absoluteX;
         this.absoluteY = absoluteY;
         this.width = width;
         this.height = height;
+        this.place = place;
     }
 
     public boolean containsAbsolutePoint(double x, double y) {
@@ -40,19 +46,27 @@ public abstract class Canvas {
 
     public void addChild(Canvas child, double offsetX, double offsetY) {
         children.add(child);
-        final double width = child.width > this.width ? this.width : child.width;
-        final double height = child.height > this.height ? this.height : child.height;
+        final double width = Math.min(child.width, this.width);
+        final double height = Math.min(child.height, this.height);
 
-        child.moveAndResize(absoluteX + offsetX, absoluteY + offsetY, width, height);
+        double absX = this.absoluteX + offsetX;
+        double absY = this.absoluteY + offsetY;
+
+        //if(!this.containsAbsolutePoint(absX + width, absY + height)) {
+        //    absX = this.absoluteX;
+        //    absY = this.absoluteY;
+        //}
+
+        child.moveAndResize(absX, absY, width, height);
     }
 
     public Collection<Canvas> getChildren() {
         return children;
     }
 
-    abstract void drawContent(int mouseX, int mouseY);
+    protected abstract void drawContent(int mouseX, int mouseY);
 
-    abstract void drawBackgroundContent(int mouseX, int mouseY);
+    protected abstract void drawBackgroundContent(int mouseX, int mouseY);
 
     public void drawBackground(int mouseX, int mouseY) {
         this.drawBackgroundContent(mouseX, mouseY);
@@ -66,11 +80,14 @@ public abstract class Canvas {
      * Called once from the GUI, after the complete Canvas has been created (i.e. the Constructor has completed)
      * Unlike in MC NOT called whenever a resize takes place!
      */
-    public void init() {
+    public final void init() {
+        this.initContent();
         for (Canvas child : children) {
             child.init();
         }
     }
+
+    protected abstract void initContent();
 
     public void tearDown() {
         for (Canvas child : children) {
@@ -95,6 +112,10 @@ public abstract class Canvas {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public boolean moveAndResize(double absoluteX, double absoluteY, double width, double height) {
@@ -122,7 +143,9 @@ public abstract class Canvas {
     }
 
     public <T extends Canvas> T getSubCanvas(double offsetX, double offsetY, double width, double height, CanvasConstructor<T> con) {
-        return con.generate(this, offsetX, offsetY, width, height);
+        final T generate = con.generate(this, width, height);
+        this.addChild(generate, offsetX, offsetY);
+        return generate;
     }
 
     public CanvasSimple getInnerCanvas(double offsetAll) {
@@ -147,5 +170,14 @@ public abstract class Canvas {
 
     public int getWidth() {
         return (int) width;
+    }
+
+    protected void clearChildren() {
+        final Iterator<Canvas> iterator = this.children.iterator();
+        while (iterator.hasNext()) {
+            final Canvas next = iterator.next();
+            next.tearDown();
+            iterator.remove();
+        }
     }
 }

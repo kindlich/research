@@ -1,5 +1,6 @@
 package com.hrznstudio.research.api.research;
 
+import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.common.gui.DrawPane;
@@ -15,4 +16,6 @@ public interface IResearchAid {
     default DrawPane drawInfoForStep(IResearchPlace place, DrawPane drawPane, PlayerProgress playerProgress) {
         return drawInfo(place, drawPane, playerProgress);
     }
+
+    void attachCanvas(Canvas canvasContent);
 }

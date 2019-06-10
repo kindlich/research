@@ -1,5 +1,8 @@
 package com.hrznstudio.research.helpers;
 
+import com.hrznstudio.research.api.gui.Canvas;
+import com.hrznstudio.research.api.gui.CanvasBorder;
+import com.hrznstudio.research.api.gui.CanvasConstructors;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.player.ResearchProgress;
@@ -23,6 +26,10 @@ public class ResearchStepProgressSineMiniGame implements IResearchStepProgress {
 
     @Override
     public boolean canBeCompleted(PlayerProgress progress, IResearchPlace place) {
+        return canBeCompleted();
+    }
+
+    public boolean canBeCompleted() {
         return Math.abs(userOffset) < 0.3D;
     }
 
@@ -34,6 +41,13 @@ public class ResearchStepProgressSineMiniGame implements IResearchStepProgress {
     @Override
     public DrawPane getDrawPane(DrawPane parent, ResearchProgress progress) {
         return new DrawPaneSineMiniGame(parent, progress, this);
+    }
+
+    @Override
+    public void attachCanvas(Canvas canvasContent) {
+        final CanvasBorder innerCanvas = canvasContent.getInnerCanvas(2.0, CanvasConstructors.getBorder(1, 0xff000000));
+        final CanvasSineMiniGame game = new CanvasSineMiniGame(innerCanvas, this);
+        innerCanvas.addChild(game, 0, 0);
     }
 
 

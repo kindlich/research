@@ -1,35 +1,44 @@
 package com.hrznstudio.research.api.gui;
 
-import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
+import com.hrznstudio.research.api.research.IResearchAid;
+import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 
 public class CanvasResearchAids extends Canvas {
 
-    private final ItemStackHandlerResearchTable items;
+    private IResearchAid selectedAid;
+    private Canvas canvasContent;
 
-    protected CanvasResearchAids(Canvas parent, double offsetX, double offsetY, double width, double height, ItemStackHandlerResearchTable items) {
-        super(parent, offsetX, offsetY, width, height);
-        this.items = items;
-        //getInnerCanvas(0.0D, CanvasConstructors.getFilled(0xffff0000))
-        //        .getInnerCanvas(height / 10, CanvasConstructors.getFilled(0xff00ffff));
-
-        getSubCanvas(10, 10, 16, 16, CanvasConstructors.getConstructor(CanvasItemHolder.class, items, items.getAidSlotId(0)));
-        getSubCanvas(30, 30, 16, 16, CanvasConstructors.getConstructor(CanvasItemHolder.class, items, items.getAidSlotId(1)));
-        getSubCanvas(70, 70, 16, 16, CanvasConstructors.getConstructor(CanvasItemHolder.class, items, items.getAidSlotId(2)));
+    protected CanvasResearchAids(Canvas parent, double width, double height) {
+        super(parent, width, height);
     }
 
     @Override
-    public void init() {
-        super.init();
+    protected void initContent() {
+        final double hUnit = height / 5.0D;
+
+        final CanvasBorder headerBorder = getSubCanvas(0, 0, width, hUnit, CanvasConstructors.getConstructor(CanvasBorder.class, 0xff000000, 1));
+        headerBorder.getInnerCanvas(2.5, CanvasConstructors.getText("Research Aid", 0xffff00ff));
+
+        canvasContent = getSubCanvas(0, hUnit, width, 4 * hUnit, CanvasConstructors.getBorder(1, 0xff000000));//.getInnerCanvas(2.5D);
+        aidChanged();
     }
 
     @Override
-    void drawContent(int mouseX, int mouseY) {
+    protected void drawContent(int mouseX, int mouseY) {
 
     }
 
     @Override
-    void drawBackgroundContent(int mouseX, int mouseY) {
+    protected void drawBackgroundContent(int mouseX, int mouseY) {
 
+    }
+
+    public void aidChanged() {
+        if (this.place.getActiveAid() != this.selectedAid) {
+            this.selectedAid = this.place.getActiveAid();
+            this.canvasContent.clearChildren();
+            this.selectedAid.attachCanvas(this.canvasContent);
+        }
     }
 
 }

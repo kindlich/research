@@ -7,8 +7,8 @@ public class CanvasItemHolder extends Canvas {
     private final ItemStackHandlerResearchTable items;
     private int slot;
 
-    protected CanvasItemHolder(Canvas parent, double offsetX, double offsetY, double width, double height, ItemStackHandlerResearchTable items, int slot) {
-        super(parent, offsetX, offsetY, width, height);
+    protected CanvasItemHolder(Canvas parent, double width, double height, ItemStackHandlerResearchTable items, int slot) {
+        super(parent, width, height);
         this.items = items;
         this.slot = slot;
     }
@@ -22,19 +22,24 @@ public class CanvasItemHolder extends Canvas {
     }
 
     @Override
-    void drawContent(int mouseX, int mouseY) {
+    protected void drawContent(int mouseX, int mouseY) {
         renderer.drawItemStack(getAbsX(), getAbsY(), getWidth(), getHeight(), items.getStackInSlot(slot));
     }
 
     @Override
-    void drawBackgroundContent(int mouseX, int mouseY) {
+    protected void drawBackgroundContent(int mouseX, int mouseY) {
         if (containsAbsolutePoint(mouseX, mouseY))
             renderer.drawRect(getAbsX(), getAbsY(), getWidth(), getHeight(), 0x89abcdef);
     }
 
     @Override
+    protected void initContent() {
+
+    }
+
+    @Override
     public void handleClick(int mouseX, int mouseY, int mouseButton) {
         if (containsAbsolutePoint(mouseX, mouseY))
-            items.clickSlot(slot);
+            items.clickSlot(slot, mouseButton);
     }
 }

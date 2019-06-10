@@ -1,5 +1,6 @@
 package com.hrznstudio.research.common.blocks.researchtable;
 
+import com.hrznstudio.research.api.gui.Canvas;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -61,26 +62,42 @@ public class ItemStackHandlerResearchTable extends ItemStackHandler {
     }
 
 
-    public void clickSlot(int slotNo) {
+    public void clickSlot(int slotNo, int button) {
         final ItemStack existing = this.getStackInSlot(slotNo);
         final ItemStack mouse = this.getStackAtMouse();
 
 
         if (mouse.isEmpty()) {
             //Nothing at mouse -> pick up
-            this.setStackAtMouse(existing);
-            this.setStackInSlot(slotNo, ItemStack.EMPTY);
+
+            if(button == Canvas.buttonLeft) {
+                this.setStackAtMouse(existing);
+                this.setStackInSlot(slotNo, ItemStack.EMPTY);
+            } else {
+                final ItemStack second = existing.splitStack(existing.getCount() / 2);
+                this.setStackAtMouse(second);
+            }
 
         } else if (existing.isEmpty()) {
             //Nothing in slot -> insert
-            this.setStackAtMouse(ItemStack.EMPTY);
-            this.setStackInSlot(slotNo, mouse);
+            if(button == Canvas.buttonLeft) {
+                this.setStackAtMouse(ItemStack.EMPTY);
+                this.setStackInSlot(slotNo, mouse);
+            } else {
+                final ItemStack stack = stackAtMouse.splitStack(1);
+                this.setStackInSlot(slotNo, stack);
+            }
 
         } else if (ItemHandlerHelper.canItemStacksStack(existing, mouse)) {
             //Can merge -> put in slot
-            existing.setCount(existing.getCount() + mouse.getCount());
-            this.setStackInSlot(slotNo, existing);
-            this.setStackAtMouse(ItemStack.EMPTY);
+            if(button == Canvas.buttonLeft) {
+                existing.grow(mouse.getCount());
+                //this.setStackInSlot(slotNo, existing);
+                this.setStackAtMouse(ItemStack.EMPTY);
+            } else {
+                existing.grow(1);
+                stackAtMouse.shrink(1);
+            }
 
         } else {
             //Cannot merge -> Swap

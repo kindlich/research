@@ -1,6 +1,7 @@
 package com.hrznstudio.research.common.blocks.aids.aidBattery;
 
 import com.hrznstudio.research.ResearchMod;
+import com.hrznstudio.research.api.gui.Canvas;
 import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.api.player.PlayerProgress;
 import com.hrznstudio.research.api.research.IResearchAid;
@@ -23,5 +24,10 @@ public class AidBattery implements IResearchAid {
     @Override
     public DrawPane drawInfoForStep(IResearchPlace place, DrawPane drawPane, PlayerProgress playerProgress) {
         return drawInfo(place, drawPane, playerProgress);
+    }
+
+    @Override
+    public void attachCanvas(Canvas canvasContent) {
+        canvasContent.addChild(new CanvasAidBattery(canvasContent, canvasContent.getWidth(), canvasContent.getHeight()), 0, 0);
     }
 }

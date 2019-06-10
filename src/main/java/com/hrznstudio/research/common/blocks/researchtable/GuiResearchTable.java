@@ -25,7 +25,7 @@ public class GuiResearchTable extends GuiContainer {
     private IResearch selectedResearch;
 
     public GuiResearchTable(TileResearchTable table, EntityPlayer player) {
-        super(new ContainerResearchTable(table, player.inventory));
+        super(new ContainerResearchTable());
         final Renderer renderer = new Renderer(this);
         this.table = table;
         this.progress = APIMethods.getProgress(player);

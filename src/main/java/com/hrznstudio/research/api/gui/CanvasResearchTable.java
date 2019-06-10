@@ -1,27 +1,31 @@
 package com.hrznstudio.research.api.gui;
 
 import com.hrznstudio.research.ResearchMod;
-import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
+import com.hrznstudio.research.api.place.IResearchPlace;
+import com.hrznstudio.research.common.blocks.researchtable.TileResearchTable;
 import com.hrznstudio.research.common.gui.Renderer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 public class CanvasResearchTable extends Canvas {
     public static final ResourceLocation backgroundTexture = new ResourceLocation(ResearchMod.MODID, "textures/gui/container/research_table.png");
+    private final TileResearchTable researchTable;
+    private final EntityPlayer player;
 
-    @SuppressWarnings("FieldCanBeLocal")
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private Canvas researchList, researchSteps, researchAids, researchTools, mouseHolder;
 
-    public CanvasResearchTable(Renderer renderer, ItemStackHandlerResearchTable toolSlots, double absoluteX, double absoluteY, double width, double height) {
-        super(renderer, absoluteX, absoluteY, width, height);
-        //getInnerCanvas(10.0D, CanvasConstructors.getFilled(0xff00ffff))
-        //        .getInnerCanvas(10.0D, CanvasConstructors.getFilled(0xffffffff));
-        this.createChildren(toolSlots);
-        this.mouseHolder = new CanvasMouse(renderer, 16, 16, toolSlots);
-
+    public CanvasResearchTable(Renderer renderer, double absoluteX, double absoluteY, double width, double height, TileResearchTable researchTable, EntityPlayer player, IResearchPlace place) {
+        super(renderer, place, absoluteX, absoluteY, width, height);
+        this.researchTable = researchTable;
+        this.player = player;
+        //this.toolSlots = toolSlots;
+        //this.createChildren(researchTable, player);
+        this.mouseHolder = new CanvasMouse(renderer, place, 16, 16, researchTable.getToolSlots());
     }
 
     @Override
-    void drawContent(int mouseX, int mouseY) {
+    protected void drawContent(int mouseX, int mouseY) {
     }
 
     @Override
@@ -31,13 +35,12 @@ public class CanvasResearchTable extends Canvas {
     }
 
     @Override
-    void drawBackgroundContent(int mouseX, int mouseY) {
-//        renderer.drawRect(getAbsX(), getAbsY(), getWidth(), getHeight(), 0xffff0000);
-
+    protected void drawBackgroundContent(int mouseX, int mouseY) {
         renderer.drawTexture(getAbsX(), getAbsY(), getWidth(), getHeight(), backgroundTexture);
     }
 
-    private void createChildren(ItemStackHandlerResearchTable toolSlots) {
+    @Override
+    protected void initContent() {
         final double unitLeft = width / 25.0D;
         final double unitDown = height / 10.0D;
 
@@ -45,7 +48,7 @@ public class CanvasResearchTable extends Canvas {
             //Tools
             final double offSet = unitLeft * 3;
             final double setWidth = width - 2 * offSet;
-            researchTools = getSubCanvas(offSet, unitDown, setWidth, unitDown, CanvasConstructors.getConstructor(CanvasResearchTools.class, toolSlots));
+            researchTools = getSubCanvas(offSet, unitDown, setWidth, unitDown, CanvasConstructors.getConstructor(CanvasResearchTools.class, researchTable.getToolSlots()));
         }
 
 
@@ -54,27 +57,21 @@ public class CanvasResearchTable extends Canvas {
         {
             //Aids
             final double setWidth = unitLeft * 4;
-            researchAids = getSubCanvas(unitLeft, panelY, setWidth, panelHeights, CanvasConstructors.getConstructor(CanvasResearchAids.class, toolSlots));
+            researchAids = getSubCanvas(unitLeft, panelY, setWidth, panelHeights, CanvasConstructors.getConstructor(CanvasResearchAids.class));
         }
 
         {
             //Steps
             final double setWidth = unitLeft * 13;
             final double setX = 6 * unitLeft;
-            //researchSteps = getSubCanvas(setX, panelY, setWidth, panelHeights, CanvasConstructors.getConstructor(CanvasResearchTools.class, toolSlots));
-            researchSteps = getSubCanvas(setX, panelY, setWidth, panelHeights, CanvasConstructors.getFilled(0xffabcdef));
+            researchSteps = getSubCanvas(setX, panelY, setWidth, panelHeights, CanvasConstructors.getConstructorTypes(CanvasResearchStepList.class, new Object[]{researchTable, player}, TileResearchTable.class, EntityPlayer.class));
         }
 
         {
             //List
             final double setWidth = unitLeft * 4;
             final double setX = 20 * unitLeft;
-            researchList = getSubCanvas(setX, panelY, setWidth, panelHeights, CanvasConstructors.getConstructor(CanvasResearchTools.class, toolSlots));
+            researchList = getSubCanvas(setX, panelY, setWidth, panelHeights, CanvasConstructors.getConstructorTypes(CanvasResearchList.class, new Object[]{researchTable, player}, TileResearchTable.class, EntityPlayer.class));
         }
-    }
-
-    @Override
-    public void init() {
-        super.init();
     }
 }

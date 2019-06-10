@@ -26,9 +26,8 @@ public class GuiResearchTable2 extends GuiContainer {
     private IResearch selectedResearch;
 
 
-
     public GuiResearchTable2(TileResearchTable table, EntityPlayer player) {
-        super(new ContainerResearchTable(table, player.inventory));
+        super(new ContainerResearchTable());
         this.mc = Minecraft.getMinecraft();
 
         final ScaledResolution scaledResolution = new ScaledResolution(mc);
@@ -37,7 +36,7 @@ public class GuiResearchTable2 extends GuiContainer {
         final Renderer renderer = new Renderer(this);
         this.table = table;
         this.progress = APIMethods.getProgress(player);
-        this.canvasResearchTable = new CanvasResearchTable(renderer, table.getToolSlots(), 16, 16, width - 32, height - 32);
+        this.canvasResearchTable = new CanvasResearchTable(renderer, 16, 16, width - 32, height - 32, table, player, table.makePlace(APIMethods.getProgress(player)));
         this.canvasResearchTable.init();
     }
 
@@ -81,8 +80,6 @@ public class GuiResearchTable2 extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-
     }
 
     @Override

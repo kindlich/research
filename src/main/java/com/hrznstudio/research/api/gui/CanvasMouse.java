@@ -1,5 +1,6 @@
 package com.hrznstudio.research.api.gui;
 
+import com.hrznstudio.research.api.place.IResearchPlace;
 import com.hrznstudio.research.common.blocks.researchtable.ItemStackHandlerResearchTable;
 import com.hrznstudio.research.common.gui.Renderer;
 
@@ -7,18 +8,23 @@ public class CanvasMouse extends Canvas {
 
     private final ItemStackHandlerResearchTable toolSlots;
 
-    protected CanvasMouse(Renderer renderer, double width, double height, ItemStackHandlerResearchTable toolSlots) {
-        super(renderer, 0, 0, width, height);
+    protected CanvasMouse(Renderer renderer, IResearchPlace place, double width, double height, ItemStackHandlerResearchTable toolSlots) {
+        super(renderer, place, 0, 0, width, height);
         this.toolSlots = toolSlots;
     }
 
     @Override
-    void drawContent(int mouseX, int mouseY) {
+    protected void drawContent(int mouseX, int mouseY) {
         renderer.drawItemStack(mouseX - 8, mouseY - 8, getWidth(), getHeight(), toolSlots.getStackAtMouse());
     }
 
     @Override
-    void drawBackgroundContent(int mouseX, int mouseY) {
+    protected void drawBackgroundContent(int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    protected void initContent() {
 
     }
 

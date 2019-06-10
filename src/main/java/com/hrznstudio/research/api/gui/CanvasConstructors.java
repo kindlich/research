@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,10 @@ public class CanvasConstructors {
     public static CanvasConstructor<CanvasSimple> getBasic() {
         //return CanvasSimple::new;
         return getConstructor(CanvasSimple.class);
+    }
+
+    public static CanvasConstructor<CanvasBorder> getBorder(int borderSize, int borderColor) {
+        return getConstructor(CanvasBorder.class, borderColor, borderSize);
     }
 
     public static CanvasConstructor<CanvasText> getText(String text, int color) {
@@ -71,27 +76,23 @@ public class CanvasConstructors {
     }
 
     public static <T extends Canvas> CanvasConstructor<T> getConstructor(Class<T> cls, Object... additionalParameters) {
-        final Class<?>[] typeParameters = new Class<?>[additionalParameters.length + 5];
+        final Class<?>[] typeParameters = new Class<?>[additionalParameters.length + 3];
         typeParameters[0] = Canvas.class;
-        typeParameters[1] = double.class;//xOffset
-        typeParameters[2] = double.class;//yOffset
-        typeParameters[3] = double.class;//width
-        typeParameters[4] = double.class;//height
+        typeParameters[1] = double.class;//width
+        typeParameters[2] = double.class;//height
 
         for (int i = 0; i < additionalParameters.length; i++) {
-            typeParameters[i + 5] = makePrimitive(additionalParameters[i].getClass());
+            typeParameters[i + 3] = makePrimitive(additionalParameters[i].getClass());
         }
         return getConstructorFullTypes(cls, additionalParameters, typeParameters);
     }
 
     public static <T extends Canvas> CanvasConstructor<T> getConstructorTypes(Class<T> cls, Object[] additionalParameters, Class<?>... additionalParameterTypes) {
-        final Class<?>[] types = new Class[additionalParameterTypes.length + 5];
+        final Class<?>[] types = new Class[additionalParameterTypes.length + 3];
         types[0] = Canvas.class;
         types[1] = double.class;
         types[2] = double.class;
-        types[3] = double.class;
-        types[4] = double.class;
-        System.arraycopy(additionalParameterTypes, 0, types, 5, additionalParameterTypes.length);
+        System.arraycopy(additionalParameterTypes, 0, types, 3, additionalParameterTypes.length);
         return getConstructorFullTypes(cls, additionalParameters, types);
     }
 
@@ -124,20 +125,22 @@ public class CanvasConstructors {
         }
 
         if (typeParameters.length != additionalParameters.length) {
-            if (typeParameters.length != additionalParameters.length + 5)
+            if (typeParameters.length != additionalParameters.length + 3)
                 throw new IllegalStateException();
 
         }
 
-        return (parent, offsetX, offsetY, width, height) -> {
+        if(usedClass.getEnclosingClass() != null && !Modifier.isStatic(usedClass.getModifiers()))
+            throw new IllegalArgumentException("Currently no non-static inner classes are supported!");
+
+
+        return (parent, width, height) -> {
             try {
                 final Object[] p = new Object[usedTypeParameters.length];
                 p[0] = parent;
-                p[1] = offsetX;
-                p[2] = offsetY;
-                p[3] = width;
-                p[4] = height;
-                System.arraycopy(usedAdditionalParameters, 0, p, 5, usedAdditionalParameters.length);
+                p[1] = width;
+                p[2] = height;
+                System.arraycopy(usedAdditionalParameters, 0, p, 3, usedAdditionalParameters.length);
 
                 return usedClass.getDeclaredConstructor(usedTypeParameters).newInstance(p);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
